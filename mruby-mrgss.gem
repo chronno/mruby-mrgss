@@ -1,0 +1,7 @@
+name: mruby-mrgss
+description: mrgss class
+author: Manuel Quinteros
+website: https://github.com/chronno/mruby-mrgss
+protocol: git
+repository: https://github.com/chronno/mruby-mrgss.git
+license: MIT
