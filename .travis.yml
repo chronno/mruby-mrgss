@@ -61,7 +61,9 @@ jobs:
             - libgles2-mesa-dev
             - mingw-w64
 before_script:
+  - cd test
   - gem install git && gem install rubyzip
+  - cd ..
 script:
   - rake -m
 addons:
