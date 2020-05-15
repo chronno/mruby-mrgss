@@ -6,8 +6,7 @@ before_install:
     - sudo apt-get -qq update
 install:
     - sudo apt-get -qq install rake bison git gperf cmake ruby
-    - gem update --system
-    - gem install rubyzip
 before_script:
+  - gem install rubyzip
 script:
   - rake
