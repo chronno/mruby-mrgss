@@ -7,8 +7,8 @@ before_install:
 install:
   - sudo apt-get -qq install rake bison git gperf cmake ruby
 before_script:
-  - chdir mruby
+  - cdir mruby
   - gem install rubyzip
-  - chdir ..
+  - cdir ..
 script:
   - rake
