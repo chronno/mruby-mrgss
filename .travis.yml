@@ -7,6 +7,6 @@ before_install:
 install:
     - sudo apt-get -qq install rake bison git gperf cmake ruby
 before_script:
-  - gem update --system
+  - gem update --system 2.7.5
 script:
   - rake
