@@ -5,7 +5,8 @@ compiler:
 before_install:
     - sudo apt-get -qq update
 install:
-    - sudo apt-get -qq install rake bison git gperf cmake
+    - sudo apt-get -qq install rake bison git gperf cmake ruby
+    - gem install rubyzip
 before_script:
 script:
   - rake
