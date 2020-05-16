@@ -157,5 +157,5 @@ void mrgss_rectangle_init(mrb_state *mrb) {
 
 mrb_value create_rectangle_from(mrb_state* mrb, mrb_int x, mrb_int y, mrb_int width, mrb_int height) {
   mrb_value params[4] = {mrb_fixnum_value(x),mrb_fixnum_value(y), mrb_fixnum_value(width), mrb_fixnum_value(height)};
-  mrb_obj_new(mrb, mrb_class_get_under(mrb, MRGSS_MODULE, "Rectangle"), 4, params);
+  return mrb_obj_new(mrb, mrb_class_get_under(mrb, MRGSS_MODULE, "Rectangle"), 4, params);
 }

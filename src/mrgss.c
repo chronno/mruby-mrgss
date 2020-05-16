@@ -11,6 +11,11 @@
 
 #define MRGSS_MODULE mrb_module_get(mrb, "MRGSS")
 
+
+mrb_int cap_to_byte(mrb_int value) {
+    return value > 255 ? 255 : value < 0 ? 0 : value;
+}
+
 struct RClass* mrgss_module_init(mrb_state *mrb) {
     return mrb_define_module(mrb, "MRGSS");
 }
