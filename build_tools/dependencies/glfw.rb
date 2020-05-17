@@ -18,7 +18,7 @@ module Carbuncle
         end
   
         def include_paths
-          [base_dir, File.join(base_dir, 'includes'), build_dir, File.join(build_dir, 'includes')]
+          [base_dir, File.join(base_dir, 'include'), build_dir, File.join(build_dir, 'include/GLFW'),]
         end
       end
     end

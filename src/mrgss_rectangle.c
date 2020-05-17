@@ -1,10 +1,3 @@
-/*
-** mrb_mrgss.c - mrgss class
-**
-** Copyright (c) Manuel Quinteros 2020
-**
-** See Copyright Notice in LICENSE
-*/
 #include <mruby.h>
 #include <mruby/class.h>
 #include <mruby/data.h>
@@ -57,11 +50,11 @@ static mrb_value mrgss_rectangle_x_get(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrgss_rectangle_x_set(mrb_state *mrb, mrb_value self) {
-  mrb_int new_value;
+  mrb_value new_value;
   Rectangle *value = DATA_PTR(self);
-  mrb_get_args(mrb, "i", &new_value);
-  value->x = new_value * 1.0;
-  return self;
+  mrb_get_args(mrb, "o", &new_value);
+  value->x = mrb_int(mrb, new_value);
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_rectangle_y_get(mrb_state *mrb, mrb_value self) {
@@ -70,11 +63,11 @@ static mrb_value mrgss_rectangle_y_get(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrgss_rectangle_y_set(mrb_state *mrb, mrb_value self) {
-  mrb_int new_value;
-  Rectangle* value = DATA_PTR(self);
-  mrb_get_args(mrb, "i", &new_value);
-  value->y = new_value * 1.0;
-  return self;
+  mrb_value new_value;
+  Rectangle *value = DATA_PTR(self);
+  mrb_get_args(mrb, "o", &new_value);
+  value->y = mrb_int(mrb, new_value);
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_rectangle_width_get(mrb_state *mrb, mrb_value self) {
@@ -83,11 +76,11 @@ static mrb_value mrgss_rectangle_width_get(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrgss_rectangle_width_set(mrb_state *mrb, mrb_value self) {
-  mrb_int new_value;
-  Rectangle* value = DATA_PTR(self);
-  mrb_get_args(mrb, "i", &new_value);
-  value->width = new_value * 1.0;
-  return self;
+  mrb_value new_value;
+  Rectangle *value = DATA_PTR(self);
+  mrb_get_args(mrb, "o", &new_value);
+  value->width = mrb_int(mrb, new_value);
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_rectangle_height_get(mrb_state *mrb, mrb_value self) {
@@ -96,11 +89,11 @@ static mrb_value mrgss_rectangle_height_get(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrgss_rectangle_height_set(mrb_state *mrb, mrb_value self) {
-  mrb_int new_value;
-  Rectangle* value = DATA_PTR(self);
-  mrb_get_args(mrb, "i", &new_value);
-  value->height = new_value * 1.0;
-  return self;
+  mrb_value new_value;
+  Rectangle *value = DATA_PTR(self);
+  mrb_get_args(mrb, "o", &new_value);
+  value->height = mrb_int(mrb, new_value);
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_rectangle_empty(mrb_state *mrb, mrb_value self) {
@@ -109,7 +102,7 @@ static mrb_value mrgss_rectangle_empty(mrb_state *mrb, mrb_value self) {
   value->y = 0.0;
   value->width = 0.0;
   value->height = 0.0;
-  return self;
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_rectangle_set(mrb_state *mrb, mrb_value self) {
@@ -118,7 +111,7 @@ static mrb_value mrgss_rectangle_set(mrb_state *mrb, mrb_value self) {
   mrb_int y, width, height;
   Rectangle* other_value;
   Rectangle* value = DATA_PTR(self);  
-  args = mrb_get_args(mrb, "o|iii", &other, &y, &width, &height);
+  args = mrb_get_args(mrb, "o|fff", &other, &y, &width, &height);
   switch (args) {
   case 1:
     other_value = DATA_PTR(other);
@@ -128,7 +121,7 @@ static mrb_value mrgss_rectangle_set(mrb_state *mrb, mrb_value self) {
     value->height = other_value->height;
     break;
   case 4:
-    value->x = mrb_int(mrb, other) * 1.0;
+    value->x = mrb_int(mrb, other);
     value->y = y * 1.0;
     value->width = width * 1.0;
     value->height = height * 1.0;
@@ -137,7 +130,7 @@ static mrb_value mrgss_rectangle_set(mrb_state *mrb, mrb_value self) {
     mrb_raise(mrb, E_ARGUMENT_ERROR, WRONG_NUMBER_ARGS);
     break;
   }
-  return self;
+  return mrb_nil_value();
 }
 
 void mrgss_rectangle_init(mrb_state *mrb) {

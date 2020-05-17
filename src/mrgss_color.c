@@ -1,10 +1,3 @@
-/*
-** mrb_mrgss.c - mrgss class
-**
-** Copyright (c) Manuel Quinteros 2020
-**
-** See Copyright Notice in LICENSE
-*/
 #include <mruby.h>
 #include <mruby/class.h>
 #include <mruby/data.h>
@@ -56,7 +49,7 @@ static mrb_value mrgss_color_r_set(mrb_state *mrb, mrb_value self) {
   Color *value = DATA_PTR(self);
   mrb_get_args(mrb, "i", &new_value);
   value->r = cap_to_byte(new_value);
-  return self;
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_color_g_get(mrb_state *mrb, mrb_value self) {
@@ -69,7 +62,7 @@ static mrb_value mrgss_color_g_set(mrb_state *mrb, mrb_value self) {
   Color* value = DATA_PTR(self);
   mrb_get_args(mrb, "i", &new_value);
   value->g = cap_to_byte(new_value);
-  return self;
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_color_b_get(mrb_state *mrb, mrb_value self) {
@@ -82,7 +75,7 @@ static mrb_value mrgss_color_b_set(mrb_state *mrb, mrb_value self) {
   Color* value = DATA_PTR(self);
   mrb_get_args(mrb, "i", &new_value);
   value->b = cap_to_byte(new_value);
-  return self;
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_color_a_get(mrb_state *mrb, mrb_value self) {
@@ -95,7 +88,7 @@ static mrb_value mrgss_color_a_set(mrb_state *mrb, mrb_value self) {
   Color* value = DATA_PTR(self);
   mrb_get_args(mrb, "i", &new_value);
   value->a = cap_to_byte(new_value);
-  return self;
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_color_empty(mrb_state *mrb, mrb_value self) {
@@ -104,7 +97,7 @@ static mrb_value mrgss_color_empty(mrb_state *mrb, mrb_value self) {
   value->g = 0;
   value->b = 0;
   value->a = 255;
-  return self;
+  return mrb_nil_value();
 }
 
 static mrb_value mrgss_color_set(mrb_state *mrb, mrb_value self) {
@@ -132,7 +125,7 @@ static mrb_value mrgss_color_set(mrb_state *mrb, mrb_value self) {
     mrb_raise(mrb, E_ARGUMENT_ERROR, WRONG_NUMBER_ARGS);
     break;
   }
-  return self;
+  return mrb_nil_value();
 }
 
 void mrgss_color_init(mrb_state *mrb) {
