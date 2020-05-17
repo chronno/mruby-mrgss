@@ -26,6 +26,7 @@ require_relative 'build_tools/dependencies/physfs'
 require_relative 'build_tools/dependencies/soloud'
 require_relative 'build_tools/dependencies/libwebsockets'
 require_relative 'build_tools/dependencies/mbedtls'
+require_relative 'build_tools/dependencies/glfw'
 
 MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   spec.license = 'MIT'

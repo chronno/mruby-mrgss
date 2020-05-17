@@ -19,6 +19,10 @@ module Carbuncle
       @freetype ||= Carbuncle::Dependencies::Freetype.new(self)
     end
 
+    def glfw
+      @glfw ||= Carbuncle::Dependencies::GLFW.new(self)
+    end
+
     def raylib
       @raylib ||= Carbuncle::Dependencies::Raylib.new(self)
     end
@@ -84,6 +88,19 @@ module Carbuncle
         '-DLIBXML2_WITH_ICONV=OFF',
         '-DLIBXML2_WITH_HTML=OFF',
         '-DLIBXML2_WITH_LZMA=OFF'
+      ]
+    end
+
+    def glfw_cmake_flags
+      [
+        '-DPLATFORM=Desktop',
+        '-DSTATIC=ON',
+        '-DBUILD_EXAMPLES=OFF',
+        '-DBUILD_GAMES=OFF',
+        "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
+        '-DSUPPORT_FILEFORMAT_BMP=ON',
+        '-DSUPPORT_FILEFORMAT_JPG=ON',
+        '-DUSE_AUDIO=OFF' # We use SoLoud instead
       ]
     end
 
@@ -182,6 +199,10 @@ module Carbuncle
       'libfreetype.a'
     end
 
+    def glfw_library
+      'libglfw3.a'
+    end
+
     def raylib_library
       'libraylib.a'
     end
@@ -224,7 +245,7 @@ module Carbuncle
 
     def all_dependencies
       @all_dependencies ||= [
-        raylib, zlib, freetype, libxml2, tmx, physfs, soloud, ssl, # ws
+        glfw, raylib, zlib, freetype, libxml2, tmx, physfs, soloud, ssl, # ws
       ]
     end
   end
