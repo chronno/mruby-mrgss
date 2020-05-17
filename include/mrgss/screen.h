@@ -8,7 +8,7 @@
 typedef struct mrgss_screen {
     const char* title;
     Rectangle* screen_rect;
-    mrb_bool fullscreen, hide;
+    mrb_bool fullscreen, hide, disposed;
     Image windowIcon;
     GLFWwindow* window;
 } Screen;

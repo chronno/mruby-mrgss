@@ -1,7 +1,7 @@
 include MRGSS
 begin
-    screen = Screen.new(Rectangle.new(40,40,640,480), "Hello World")
-    
+    game = MRGSS::Game.new(640, 480)
+    game.run
 rescue Exception => e
     p e
 end
