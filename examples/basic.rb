@@ -8,8 +8,7 @@ begin
             @size = 5
         end
 
-        def update
-            
+        def update            
             if @font.nil?
                 @font = Font.new
             end
