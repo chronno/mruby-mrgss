@@ -21,8 +21,7 @@ begin
             @size += 1
             @size %= 100
             @color.r +=1
-            @color.r %=255 
-            
+            @color.r %=255  
         end
 
         def render

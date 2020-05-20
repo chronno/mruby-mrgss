@@ -39,8 +39,6 @@ end
 
 MRuby::CrossBuild.new('emscipten') do |conf|
   toolchain :clang
-
-  toolchain :clang
   conf.gembox 'default'
   conf.cc.command = 'emcc'
   conf.cc.flags = %W(-Os)

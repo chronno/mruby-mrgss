@@ -43,7 +43,6 @@ static mrb_value mrgss_sprite_initialize(mrb_state* mrb, mrb_value self) {
 
 
 static mrb_value mrgss_sprite_draw(mrb_state* mrb, mrb_value self) {
-
     MR_Sprite* sprite = DATA_PTR(self);
     DrawTexturePro(sprite->texture, sprite->srcRect, sprite->dstRect, (Vector2){0,0} , sprite->angle, (Color){255,255,255,255});  
     return mrb_nil_value();
