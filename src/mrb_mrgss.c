@@ -12,6 +12,8 @@ void mrb_mruby_mrgss_gem_init(mrb_state *mrb)
   mrgss_color_init(mrb);
   mrgss_screen_init(mrb);
   mrgss_font_init(mrb);
+  mrgss_bitmap_init(mrb);
+  mrgss_sprite_init(mrb);
   DONE;
 }
 

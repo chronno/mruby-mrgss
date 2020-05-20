@@ -16,6 +16,8 @@ void mrgss_rectangle_init(mrb_state* mrb);
 void mrgss_color_init(mrb_state *mrb);
 void mrgss_screen_init(mrb_state *mrb);
 void mrgss_font_init(mrb_state *mrb);
+void mrgss_bitmap_init(mrb_state *mrb);
+void mrgss_sprite_init(mrb_state *mrb);
 //Initializers
 mrb_value create_rectangle_from(mrb_state* mrb, mrb_int x, mrb_int y, mrb_int width, mrb_int height);
 mrb_value create_color_from(mrb_state* mrb, mrb_int x, mrb_int y, mrb_int width, mrb_int height);
