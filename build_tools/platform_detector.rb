@@ -15,7 +15,7 @@ module Carbuncle
 
     def detect_by_cross_build
       return windows_build if /mingw/ =~ env.cc.command
-
+      return emscripten_build if /emcc/ =~ env.cc.command
       raise 'The only cross-build available for Carbuncle is Windows with MingW.'
     end
 
@@ -42,6 +42,12 @@ module Carbuncle
       return Carbuncle::Linux::GCC.new(env) if toolchains.include? 'gcc'
 
       raise 'Carbuncle only allows GCC Builds on Linux for now.'
+    end
+
+    def emscripten_build
+      return Carbuncle::WEB::Emscripten.new(env) if toolchains.include? 'gcc'
+
+      raise 'Carbuncle only allows GCC Builds for Web for now.'
     end
 
     def build

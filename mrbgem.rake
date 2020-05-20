@@ -15,6 +15,7 @@ require_relative 'build_tools/build'
 require_relative 'build_tools/linux/gcc'
 require_relative 'build_tools/osx/clang'
 require_relative 'build_tools/win32/mingw'
+require_relative 'build_tools/emscripten/emcc'
 
 require_relative 'build_tools/dependency'
 require_relative 'build_tools/dependencies/freetype'

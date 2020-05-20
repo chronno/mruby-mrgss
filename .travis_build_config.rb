@@ -37,4 +37,20 @@ MRuby::CrossBuild.new('win32') do |conf|
   end
 end
 
+MRuby::CrossBuild.new('emscipten') do |conf|
+  toolchain :clang
+
+  toolchain :clang
+  conf.gembox 'default'
+  conf.cc.command = 'emcc'
+  conf.cc.flags = %W(-Os)
+  conf.linker.command = 'emcc'
+  conf.archiver.command = 'emar'
+  
+  if ENV['DEBUG'] == 'true'
+    conf.enable_debug
+    conf.cc.defines = %w(MRB_ENABLE_DEBUG_HOOK)
+    conf.gem core: 'mruby-bin-debugger'
+  end
+end
 
