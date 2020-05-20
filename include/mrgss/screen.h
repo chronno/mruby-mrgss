@@ -11,6 +11,6 @@ typedef struct mrgss_screen {
     mrb_bool fullscreen, hide, disposed;
     Image windowIcon;
     GLFWwindow* window;
-} Screen;
+} MR_Screen;
 
 #endif

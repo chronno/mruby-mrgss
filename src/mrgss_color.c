@@ -16,7 +16,7 @@ static mrb_value mrgss_color_initialize(mrb_state *mrb, mrb_value self) {
     mrb_value r, g, b, a;
     mrb_int args;
     args = mrb_get_args(mrb, "|oooo", &r, &g, &b, &a);
-    color = mrb_malloc(mrb, sizeof(Color*));
+    color = mrb_malloc(mrb, sizeof(Color));
     switch (args) {
     case 0:
       color->r = 0;

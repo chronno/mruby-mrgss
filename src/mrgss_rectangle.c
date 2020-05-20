@@ -12,11 +12,11 @@ static const struct mrb_data_type rectangle_data_type = {
 };
 
 static mrb_value mrgss_rectangle_initialize(mrb_state *mrb, mrb_value self) {
-    Rectangle *rect;
+    Rectangle* rect;
     mrb_value x, y, width, height;
     mrb_int args;
     args = mrb_get_args(mrb, "|oooo", &x, &y, &width, &height);
-    rect = mrb_malloc(mrb, sizeof(Rectangle*));
+    rect = mrb_malloc(mrb, sizeof(Rectangle));
     switch (args) {
     case 0:
       rect->x = 0.0;

@@ -6,14 +6,17 @@ module MRGSS
         end
 
         def update
-            @screen.update
+            
+        end
+
+        def render
+            
         end
 
         def run
             @screen.show
             while !@screen.disposed?
-                update
-                @screen.update
+                @screen.update(self)
             end
         end
     end

@@ -43,7 +43,8 @@ MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   # MRuby Dependencies
   #----------------------------------------------------------------------------
   spec.add_dependency('mruby-mtest', :github => 'iij/mruby-mtest')
-
+  spec.add_dependency('mruby-errno', :github => 'iij/mruby-errno')
+  
   #----------------------------------------------------------------------------
   # Compilation Flags
   #----------------------------------------------------------------------------
