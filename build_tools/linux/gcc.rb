@@ -7,9 +7,7 @@ module Carbuncle
 
       def libraries
         %w[
-          glfw3 raylib freetype physfs tmx xml2 soloud
-          mbedtls mbedcrypto mbedx509
-          z m dl pthread X11 xcb GL Xext Xau Xdmcp
+          glfw3 z m dl pthread X11 xcb GL Xext Xau Xdmcp
         ]
       end
 
@@ -20,18 +18,6 @@ module Carbuncle
       def linker_flags
         [
           '-no-pie'
-        ]
-      end
-
-      def zlib_library
-        'libz.a'
-      end
-
-      def soloud_cmake_flags
-        [
-          "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
-          '-DSOLOUD_BACKEND_SDL2=OFF',
-          '-DSOLOUD_BACKEND_ALSA=ON'
         ]
       end
     end

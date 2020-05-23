@@ -18,22 +18,13 @@ require_relative 'build_tools/win32/mingw'
 require_relative 'build_tools/emscripten/emcc'
 
 require_relative 'build_tools/dependency'
-require_relative 'build_tools/dependencies/freetype'
-require_relative 'build_tools/dependencies/raylib'
-require_relative 'build_tools/dependencies/zlib'
-require_relative 'build_tools/dependencies/libxml2'
-require_relative 'build_tools/dependencies/tmx'
-require_relative 'build_tools/dependencies/physfs'
-require_relative 'build_tools/dependencies/soloud'
-require_relative 'build_tools/dependencies/libwebsockets'
-require_relative 'build_tools/dependencies/mbedtls'
 require_relative 'build_tools/dependencies/glfw'
 
 MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   spec.license = 'MIT'
   spec.authors = 'Manuel Quinteros'
   spec.version = 0.1
-  
+  spec.bins = %w[mruby-mrgss]
   #----------------------------------------------------------------------------
   # Game Lib Dependencies
   #----------------------------------------------------------------------------
@@ -63,5 +54,6 @@ MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   spec.linker.flags += platform.linker_flags
   spec.build.linker.library_paths += platform.library_paths
   spec.build.linker.libraries += platform.libraries
+  puts platform.library_paths
   spec.build.linker.flags += platform.linker_flags
 end

@@ -12,12 +12,5 @@ module MRGSS
         def render
             
         end
-
-        def run
-            @screen.show
-            while !@screen.disposed?
-                @screen.update(self)
-            end
-        end
     end
 end

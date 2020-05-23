@@ -24,14 +24,6 @@ module Carbuncle
       def toolchain_name
         'clang'
       end
-
-      def soloud_cmake_flags
-        [
-          "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
-          '-DSOLOUD_BACKEND_SDL2=OFF',
-          '-DSOLOUD_BACKEND_COREAUDIO=ON'
-        ]
-      end
     end
   end
 end

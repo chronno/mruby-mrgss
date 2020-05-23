@@ -40,8 +40,10 @@ end
 MRuby::CrossBuild.new('emscipten') do |conf|
   toolchain :clang
   conf.gembox 'default'
+  conf.gem File.expand_path(File.dirname(__FILE__))
   conf.cc.command = 'emcc'
   conf.cc.flags = %W(-Os)
+  conf.exts.executable = '.html'
   conf.linker.command = 'emcc'
   conf.archiver.command = 'emar'
   
@@ -51,4 +53,3 @@ MRuby::CrossBuild.new('emscipten') do |conf|
     conf.gem core: 'mruby-bin-debugger'
   end
 end
-
