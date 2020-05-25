@@ -1,10 +1,10 @@
-module Carbuncle
+module Builder
   class Build
     attr_reader :env
 
     def initialize(env)
       @env = env
-      Carbuncle::Console.header("Detecting Carbuncle build for #{type}.")
+      Builder::Console.header("Detecting Builder build for #{type}.")
     end
 
     def build_dependencies
@@ -12,7 +12,11 @@ module Carbuncle
     end
     
     def glfw
-      @glfw ||= Carbuncle::Dependencies::GLFW.new(self)
+      @glfw ||= Builder::Dependencies::GLFW.new(self)
+    end
+
+    def gl3w
+      @gl3w ||= Builder::Dependencies::GL3W.new(self)
     end
 
     def library_paths
@@ -20,7 +24,7 @@ module Carbuncle
     end
 
     def libraries
-      %w[glfw]
+      %w[glfw gl3w]
     end
 
     def glfw_cmake_flags
@@ -32,6 +36,13 @@ module Carbuncle
         "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
         '-DSUPPORT_FILEFORMAT_BMP=ON',
         '-DSUPPORT_FILEFORMAT_JPG=ON',
+      ]
+    end
+
+    def gl3w_cmake_flags
+      [
+        # "-G\"MSYS Makefiles\"",
+        "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}"
       ]
     end
  
@@ -54,12 +65,21 @@ module Carbuncle
     def library_extension
       'a'
     end
+
     def glfw_library
       'libglfw3.a'
     end
 
+    def gl3w_library
+      
+    end
+
     def all_dependencies
-      @all_dependencies ||= [glfw]
+      @all_dependencies ||= [glfw, gl3w]
+    end
+
+    def files
+      all_dependencies.map(&:add_to_build).flatten
     end
   end
 end

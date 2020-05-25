@@ -1,7 +1,7 @@
 include MRGSS
 begin
-    rect = Rect.new
-    p rect
+    game = Game.new("a game", Rect.new(0,0,640,480), false)
+    game.start
 rescue Exception => e
     p e
 end

@@ -1,4 +1,4 @@
-module Carbuncle
+module Builder
   class PlatformDetector
     attr_reader :env
 
@@ -16,7 +16,7 @@ module Carbuncle
     def detect_by_cross_build
       return windows_build if /mingw/ =~ env.cc.command
       return emscripten_build if /emcc/ =~ env.cc.command
-      raise 'The only cross-build available for Carbuncle is Windows with MingW.'
+      raise 'The only cross-build available for Builder is Windows with MingW.'
     end
 
     def detect_by_system
@@ -27,27 +27,27 @@ module Carbuncle
     end
 
     def osx_build
-      return Carbuncle::OSX::CLang.new(env) if toolchains.include? 'clang'
+      return Builder::OSX::CLang.new(env) if toolchains.include? 'clang'
 
-      raise 'Carbuncle allows only CLang builds on MacOS for now.'
+      raise 'Builder allows only CLang builds on MacOS for now.'
     end
 
     def windows_build
-      return Carbuncle::Win32::MinGW.new(env) if toolchains.include? 'gcc'
+      return Builder::Win32::MinGW.new(env) if toolchains.include? 'gcc'
 
-      raise 'Carbuncle allows only MinGW builds for Windows for now.'
+      raise 'Builder allows only MinGW builds for Windows for now.'
     end
 
     def linux_build
-      return Carbuncle::Linux::GCC.new(env) if toolchains.include? 'gcc'
+      return Builder::Linux::GCC.new(env) if toolchains.include? 'gcc'
 
-      raise 'Carbuncle only allows GCC Builds on Linux for now.'
+      raise 'Builder only allows GCC Builds on Linux for now.'
     end
 
     def emscripten_build
-      return Carbuncle::WEB::Emscripten.new(env) if toolchains.include? 'gcc'
+      return Builder::WEB::Emscripten.new(env) if toolchains.include? 'gcc'
 
-      raise 'Carbuncle only allows GCC Builds for Web for now.'
+      raise 'Builder only allows GCC Builds for Web for now.'
     end
 
     def build

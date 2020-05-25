@@ -1,6 +1,6 @@
-module Carbuncle
+module Builder
   module OSX
-    class CLang < Carbuncle::Build
+    class CLang < Builder::Build
       def type
         'Mac OSX using CLang'
       end

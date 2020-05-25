@@ -1,6 +1,6 @@
-module Carbuncle
+module Builder
     module Dependencies
-      class GLFW < Carbuncle::Dependency
+      class GLFW < Builder::Dependency
         def name
           'GLFW'
         end

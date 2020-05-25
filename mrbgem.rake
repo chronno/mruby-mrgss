@@ -19,6 +19,7 @@ require_relative 'build_tools/emscripten/emcc'
 
 require_relative 'build_tools/dependency'
 require_relative 'build_tools/dependencies/glfw'
+require_relative 'build_tools/dependencies/gl3w'
 
 MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   spec.license = 'MIT'
@@ -28,14 +29,14 @@ MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   #----------------------------------------------------------------------------
   # Game Lib Dependencies
   #----------------------------------------------------------------------------
-  platform = Carbuncle::PlatformDetector.new(self).detect
+  platform = Builder::PlatformDetector.new(self).detect
   platform.build_dependencies
 
   #----------------------------------------------------------------------------
   # MRuby Dependencies
   #----------------------------------------------------------------------------
-  spec.add_dependency('mruby-mtest', :github => 'iij/mruby-mtest')
-  spec.add_dependency('mruby-errno', :github => 'iij/mruby-errno')
+  #spec.add_dependency('mruby-mtest', :github => 'iij/mruby-mtest')
+  #spec.add_dependency('mruby-errno', :github => 'iij/mruby-errno')
   
   #----------------------------------------------------------------------------
   # Compilation Flags
@@ -44,16 +45,19 @@ MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   spec.build.cc.flags    << platform.flags
   spec.cc.include_paths  << platform.include_paths
   spec.cxx.include_paths << platform.include_paths
-
-  include_dir = [File.join(dir, 'include')]
+  include_dir = [File.join(dir, 'include'), File.join(dir, 'include', "**", "*.h") ]
   spec.build.cc.include_paths  += platform.include_paths + include_dir
   spec.build.cxx.include_paths += platform.include_paths + include_dir
-
   spec.linker.library_paths += platform.library_paths
   spec.linker.libraries += platform.libraries
   spec.linker.flags += platform.linker_flags
   spec.build.linker.library_paths += platform.library_paths
   spec.build.linker.libraries += platform.libraries
-  puts platform.library_paths
   spec.build.linker.flags += platform.linker_flags
+
+  vendor_dir = File.join(spec.build.build_dir, 'vendor');
+  objs = platform.files.map do |f|
+    objfile(f.relative_path_from(vendor_dir).to_s.pathmap("#{vendor_dir}/%X"))
+  end
+  spec.build.libmruby << objs
 end

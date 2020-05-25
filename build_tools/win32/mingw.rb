@@ -1,6 +1,6 @@
-module Carbuncle
+module Builder
   module Win32
-    class MinGW < Carbuncle::Build
+    class MinGW < Builder::Build
       def type
         'Windows using MinGW'
       end

@@ -1,4 +1,4 @@
-module Carbuncle
+module Builder
   class Dependency
     attr_reader :config
 
@@ -25,7 +25,7 @@ module Carbuncle
     def download
       puts("Downloading #{name}...")
       FileUtils.mkdir_p(vendor_dir)
-      open(zip_file, 'wb') { |file| file << open(url).read }
+      URI.open(zip_file, 'wb') { |file| file << open(url).read }
     end
 
     def unzip
@@ -87,6 +87,10 @@ module Carbuncle
 
     def cmake_dir
       '..'
+    end
+
+    def add_to_build
+      []
     end
   end
 end

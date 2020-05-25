@@ -1,6 +1,6 @@
-module Carbuncle
+module Builder
   module Linux
-    class GCC < Carbuncle::Build
+    class GCC < Builder::Build
       def type
         'Linux using GCC'
       end

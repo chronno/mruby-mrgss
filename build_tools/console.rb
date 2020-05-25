@@ -1,4 +1,4 @@
-module Carbuncle
+module Builder
   module Console
     module_function
 

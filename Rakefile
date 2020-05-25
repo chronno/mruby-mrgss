@@ -34,4 +34,11 @@ task :libtest do
   sh "cd ./mruby/bin && ./mruby ../../test/tests.rb"
 end
 
+
+desc "serve emscripten"
+task :serve do
+  exit 0 unless File.directory?('mruby')
+  sh "cd ./mruby/build/emscripten/bin && ruby -run -e httpd . -p 9090"
+end
+
 task :default => :compile

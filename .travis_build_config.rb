@@ -37,7 +37,7 @@ MRuby::CrossBuild.new('win32') do |conf|
   end
 end
 
-MRuby::CrossBuild.new('emscipten') do |conf|
+MRuby::CrossBuild.new('emscripten') do |conf|
   toolchain :clang
   conf.gembox 'default'
   conf.gem File.expand_path(File.dirname(__FILE__))
