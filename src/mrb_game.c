@@ -3,36 +3,58 @@
 #include <mruby/data.h>
 #include <mrgss.h>
 #include <mrgss/utils.h>
+#include <mrgss/structs.h>
 #include <mrgss/types/game.h>
 
 
+static const struct mrb_data_type game_data_type = {
+  "MRGSS::Game", mrb_free
+};
+
 static mrb_value mrgss_game_initialize(mrb_state* mrb, mrb_value self) {
-    mrb_int args;
-    mrb_value rect, title, fullscreen, screen;
-    mrb_value screen_args[3];
-    args = mrb_get_args(mrb, "oo|o", &title, &rect, &fullscreen);
-    if (args == 2) { fullscreen = mrb_false_value(); } 
-    if (is_string(mrb, title) && mrgss_obj_is_a(mrb, rect, "Rect") && is_boolean(mrb, fullscreen)) {
-        screen_args[0] = title;
-        screen_args[1] = rect;
-        screen_args[2] = fullscreen;
-        screen = mrgss_instance_new(mrb, "Screen", 3, screen_args);
-        MRG_SET_PROP("@screen", screen);
-    } else {
-        mrb_raise(mrb, E_ARGUMENT_ERROR, WRONG_TYPE_ARGS);  
-        return mrb_nil_value();
-    }
+    mrb_int args, width, height;
+    mrb_bool fullscreen;
+    char * title;
+    MR_Context* context;
+    args = mrb_get_args(mrb, "zii|b", &title, &width, &height, &fullscreen);
+    if (args == 2) { fullscreen = FALSE; } 
+    context = mrb_malloc(mrb, sizeof(MR_Context));
+    context->screen = mrb_malloc(mrb, sizeof(MR_Screen));
+    context->screen->fullscreen = fullscreen;
+    context->screen->width = width;
+    context->screen->height = height;
+    context->screen->title = title;
+    context->mrb = mrb;
+    context->game = self;
+    DATA_PTR(self) = context;
+    DATA_TYPE(self) = &game_data_type;
     return self;
 }
 
-static mrb_value mrgss_game_start(mrb_state* mrb, mrb_value self) {
-    game_init(mrb, self, MRG_GET_PROP("@screen"));
+static mrb_value mrgss_game_run(mrb_state* mrb, mrb_value self) {
+    game_init(DATA_PTR(self));
     return mrb_nil_value();
 }
+
+static mrb_value mrgss_game_start(mrb_state* mrb, mrb_value self) {
+    return mrb_nil_value();
+}
+
+static mrb_value mrgss_game_update(mrb_state* mrb, mrb_value self) {
+    return mrb_nil_value();
+}
+
+static mrb_value mrgss_game_render(mrb_state* mrb, mrb_value self) {
+    return mrb_nil_value();
+}
+
 
 void mrgss_game_init(mrb_state* mrb) {
     struct RClass* point = mrgss_class_new(mrb, "Game");
     mrb_define_method(mrb, point, "initialize", mrgss_game_initialize, MRB_ARGS_REQ(2)|MRB_ARGS_OPT(1));
-    mrb_define_method(mrb, point, "start", mrgss_game_start, MRB_ARGS_REQ(2)|MRB_ARGS_OPT(1));
+    mrb_define_method(mrb, point, "run", mrgss_game_run, MRB_ARGS_NONE());
+    mrb_define_method(mrb, point, "start", mrgss_game_start, MRB_ARGS_NONE());
+    mrb_define_method(mrb, point, "update", mrgss_game_update, MRB_ARGS_NONE());
+    mrb_define_method(mrb, point, "render", mrgss_game_render, MRB_ARGS_NONE());
     
 }

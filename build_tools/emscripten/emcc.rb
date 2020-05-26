@@ -11,25 +11,34 @@
 
       def flags
         [
+          
+        ]
+      end
+
+      def raylib_cmake_flags
+        [
+          '-DPLATFORM=Web',
+          '-DSTATIC=ON',
+          '-DBUILD_EXAMPLES=OFF',
+          '-DBUILD_GAMES=OFF',
+          "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
+          '-DSUPPORT_FILEFORMAT_BMP=ON',
+          '-DSUPPORT_FILEFORMAT_JPG=ON',
         ]
       end
 
       def linker_flags
         [
-          '-s USE_GLFW=3',
-          '-s USE_WEBGL2=1',
-          '-s ASYNCIFY',
-          '--use-preload-plugins',
-          '-0',
+        
         ]
       end
 
       def all_dependencies
-        @all_dependencies ||= []
+        @all_dependencies ||= [raylib]
       end
       
       def libraries
-        %w[  ]
+        %w[raylib]
       end
 
     end

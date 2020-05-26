@@ -19,15 +19,31 @@ module Builder
       @gl3w ||= Builder::Dependencies::GL3W.new(self)
     end
 
+    def raylib
+      @raylib ||= Builder::Dependencies::Raylib.new(self)
+    end
+
     def library_paths
       all_dependencies.map(&:lib_dir)
     end
 
     def libraries
-      %w[glfw gl3w]
+      %w[raylib]
     end
 
     def glfw_cmake_flags
+      [
+        '-DPLATFORM=Desktop',
+        '-DSTATIC=ON',
+        '-DBUILD_EXAMPLES=OFF',
+        '-DBUILD_GAMES=OFF',
+        "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
+        '-DSUPPORT_FILEFORMAT_BMP=ON',
+        '-DSUPPORT_FILEFORMAT_JPG=ON',
+      ]
+    end
+
+    def raylib_cmake_flags
       [
         '-DPLATFORM=Desktop',
         '-DSTATIC=ON',
@@ -70,12 +86,16 @@ module Builder
       'libglfw3.a'
     end
 
+    def raylib_library
+      'libraylib.a'
+    end
+
     def gl3w_library
       
     end
 
     def all_dependencies
-      @all_dependencies ||= [glfw, gl3w]
+      @all_dependencies ||= [raylib]
     end
 
     def files

@@ -20,6 +20,7 @@ require_relative 'build_tools/emscripten/emcc'
 require_relative 'build_tools/dependency'
 require_relative 'build_tools/dependencies/glfw'
 require_relative 'build_tools/dependencies/gl3w'
+require_relative 'build_tools/dependencies/raylib'
 
 MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   spec.license = 'MIT'

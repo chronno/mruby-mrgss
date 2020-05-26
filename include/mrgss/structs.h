@@ -1,17 +1,8 @@
 #ifndef MRUBY_MRGSS_TYPES_H
 #define MRUBY_MRGSS_TYPES_H
 #include <mruby.h>
-#ifndef __EMSCRIPTEN__
-#include <GL/gl3w.h>
-#endif
-#include <GLFW/glfw3.h>
-/*
- * Usefull 
-*/
-typedef struct mrgss_context {
-    mrb_state *mrb;
-    mrb_value game;
-} MR_Context;
+#include <raylib.h>
+
 /*
  * Base Structures
 */ 
@@ -28,11 +19,29 @@ typedef struct mrgss_point {
 } MR_Point;
 
 typedef struct mrgss_screen {
-    GLFWwindow *window;
-    GLboolean fullscreen, disposed;
-    GLuint width;
-    GLuint height;
-    GLchar *title;
+    void *window;
+    mrb_bool fullscreen, disposed;
+    mrb_int width, height;
+    char *title;
 } MR_Screen;
 
+typedef struct mrgss_bitmap {
+    const char* name;
+    Image image;
+} MR_Bitmap;
+
+typedef struct mrgss_sprite {
+    MR_Bitmap* bitmap;
+    Texture texture;
+    MR_Rect srcRect, dstRect;
+    mrb_float angle;
+} MR_Sprite;
+/*
+ * Usefull 
+*/
+typedef struct mrgss_context {
+    mrb_state *mrb;
+    MR_Screen *screen;
+    mrb_value game;
+} MR_Context;
 #endif

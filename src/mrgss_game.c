@@ -1,37 +1,40 @@
 #include <stdlib.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
-#else
-#include <GL/gl3w.h>
 #endif
-#include <GLFW/glfw3.h>
 #include <mruby.h>
 #include <mruby/data.h>
 #include <mrgss/structs.h>
-#include <mrgss/types/screen.h>
+#include <mrgss/types/game.h>
+#include <raylib.h>
 
-static void main_loop(void* p) {
-    MR_Screen* screen = (MR_Screen*) p;
-    if (!window_should_close(screen)) {
-        window_update(screen);
-        window_swapbuffers(screen);
+void main_loop(void* p) {
+    MR_Context* context = (MR_Context*) p;
+    if(!WindowShouldClose()) {
+        mrb_funcall(context->mrb, context->game, "update", 0);
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        mrb_funcall(context->mrb, context->game, "render", 0);
+        DrawText(context->screen->title, 0, 0, 20, LIGHTGRAY);
+        EndDrawing();
     } else {
-        screen->disposed = TRUE;
+        context->screen->disposed = TRUE;
         #ifdef __EMSCRIPTEN__
         emscripten_cancel_main_loop();
         #endif
     }
+    sprintf(context->screen->title, "%d", GetFPS());
 }
 
-void game_init(mrb_state *mrb, mrb_value game, mrb_value screen) {
-    MR_Screen *cscreen = DATA_PTR(screen);    
-    window_show(cscreen);
-    printf("window shown\n");
+void game_init(MR_Context* game_context) {
+    InitWindow(game_context->screen->width, game_context->screen->height, game_context->screen->title);
+    mrb_funcall(game_context->mrb, game_context->game, "start", 0);
     #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop_arg(main_loop, cscreen, -1, 0);
+    emscripten_set_main_loop_arg(main_loop, game_context, 0, TRUE);
     #else 
-    while(!cscreen->disposed) {       
-        main_loop(cscreen);
+    while(!game_context->screen->disposed) {       
+        main_loop(game_context);
     }
     #endif
+    CloseWindow();
 }

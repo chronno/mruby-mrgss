@@ -1,6 +1,6 @@
 #include <mruby.h>
 #ifdef __EMSCRIPTEN__
-#include <emscripten.h>
+#include <emscripten/emscripten.h>
 #endif
 #define WRONG_TYPE_ARGS            "Wrong type of arguments"
 #define WRONG_NUMBER_ARGS            "Wrong number of arguments"

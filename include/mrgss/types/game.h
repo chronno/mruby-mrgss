@@ -1,3 +1,3 @@
-#include <mruby.h>
+#include <mrgss/structs.h>
 
-void game_init(mrb_state *mrb, mrb_value game, mrb_value screen);
+void game_init(MR_Context* context);
