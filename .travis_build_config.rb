@@ -37,38 +37,38 @@ MRuby::CrossBuild.new('win32') do |conf|
   end
 end
 
-MRuby::CrossBuild.new('emscripten') do |conf|
-  toolchain :clang
-  conf.gembox 'default'
-  conf.gem File.expand_path(File.dirname(__FILE__))
-  conf.cc.command = 'emcc'
-  conf.cc.flags = [
-    '-s ASYNCIFY=1',
-    '-s WASM=0',
-    '-s USE_GLFW=3',
-    '-s USE_WEBGL2=1',
-    '--use-preload-plugins',
-    '-s FORCE_FILESYSTEM=1',
-    '-O3'
-  ]
-  conf.exts.executable = '.html'
-  conf.linker.command = 'emcc'
-  conf.linker.flags = [
-    '-s ASYNCIFY=1',
-    '-s WASM=0',
-    '-s USE_GLFW=3',
-    '-s USE_WEBGL2=1',
-    '--use-preload-plugins',
-    '-s FORCE_FILESYSTEM=1',
-    '-O3'
-  ]
+# MRuby::CrossBuild.new('emscripten') do |conf|
+#   toolchain :clang
+#   conf.gembox 'default'
+#   conf.gem File.expand_path(File.dirname(__FILE__))
+#   conf.cc.command = 'emcc'
+#   conf.cc.flags = [
+#     '-s ASYNCIFY=1',
+#     '-s WASM=0',
+#     '-s USE_GLFW=3',
+#     '-s USE_WEBGL2=1',
+#     '--use-preload-plugins',
+#     '-s FORCE_FILESYSTEM=1',
+#     '-O3'
+#   ]
+#   conf.exts.executable = '.html'
+#   conf.linker.command = 'emcc'
+#   conf.linker.flags = [
+#     '-s ASYNCIFY=1',
+#     '-s WASM=0',
+#     '-s USE_GLFW=3',
+#     '-s USE_WEBGL2=1',
+#     '--use-preload-plugins',
+#     '-s FORCE_FILESYSTEM=1',
+#     '-O3'
+#   ]
   
   
-  conf.archiver.command = 'emar'
+#   conf.archiver.command = 'emar'
   
-  if ENV['DEBUG'] == 'true'
-    conf.enable_debug
-    conf.cc.defines = %w(MRB_ENABLE_DEBUG_HOOK)
-    conf.gem core: 'mruby-bin-debugger'
-  end
-end
+#   if ENV['DEBUG'] == 'true'
+#     conf.enable_debug
+#     conf.cc.defines = %w(MRB_ENABLE_DEBUG_HOOK)
+#     conf.gem core: 'mruby-bin-debugger'
+#   end
+# end
