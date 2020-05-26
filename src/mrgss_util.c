@@ -64,7 +64,6 @@ void mrgss_emsc_fetch_file(const char* filename) {
     char* endpoint = malloc(strlen(host) + strlen(filename) + 1);
 	strcpy(endpoint, host);
 	strcat(endpoint, filename);
-    //emscripten_async_wget(endpoint, filename, onload, onerror);
     emscripten_wget(endpoint, filename);
 }
 #endif

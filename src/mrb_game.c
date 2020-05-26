@@ -56,5 +56,4 @@ void mrgss_game_init(mrb_state* mrb) {
     mrb_define_method(mrb, point, "start", mrgss_game_start, MRB_ARGS_NONE());
     mrb_define_method(mrb, point, "update", mrgss_game_update, MRB_ARGS_NONE());
     mrb_define_method(mrb, point, "render", mrgss_game_render, MRB_ARGS_NONE());
-    
 }

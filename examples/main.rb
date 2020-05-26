@@ -7,7 +7,7 @@ begin
         end
 
         def update
-
+            @sprite.x += 1 if Keyboard.trigger?(65)
         end
 
         def render

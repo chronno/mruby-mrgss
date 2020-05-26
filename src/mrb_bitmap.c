@@ -43,13 +43,7 @@ static mrb_value mrgss_bitmap_initialize(mrb_state* mrb, mrb_value self) {
     case 1:
         filename = mrb_str_to_cstr(mrb, param);
         #ifdef __EMSCRIPTEN__
-        // char* host = emscripten_run_script_string("/.*(?=\\/\\w*)/.exec(window.location.href).join() + '/'");
-        // char* endpoint = malloc(strlen(host) + strlen(filename) + 1);
-        // strcpy(endpoint, host);
-        // strcat(endpoint, filename);
-        //emscripten_async_wget(filename, filename, onload, onerror);
-        emscripten_wget(filename, filename);
-        //mrgss_emsc_fetch_file(filename);
+        mrgss_emsc_fetch_file(filename);
         #endif
         image->image = LoadImage(filename);
         image->name = filename;

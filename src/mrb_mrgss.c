@@ -11,6 +11,7 @@ void mrb_mruby_mrgss_gem_init(mrb_state *mrb) {
   mrgss_rectangle_init(mrb);
   mrgss_color_init(mrb);
   mrgss_game_init(mrb);
+  mrgss_keyboard_init(mrb);
   mrgss_bitmap_init(mrb);
   mrgss_sprite_init(mrb);
   DONE;
