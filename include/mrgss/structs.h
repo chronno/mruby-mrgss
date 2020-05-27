@@ -28,13 +28,14 @@ typedef struct mrgss_screen {
 typedef struct mrgss_bitmap {
     const char* name;
     Image image;
+    Texture tex;
 } MR_Bitmap;
 
 typedef struct mrgss_sprite {
-    MR_Bitmap* bitmap;
-    Texture texture;
-    MR_Rect srcRect, dstRect;
-    mrb_float angle;
+
+    MR_Rect dstRect;
+    mrb_float angle, zoom_x, zoom_y;
+    
 } MR_Sprite;
 /*
  * Usefull 

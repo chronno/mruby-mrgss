@@ -47,10 +47,12 @@ static mrb_value mrgss_bitmap_initialize(mrb_state* mrb, mrb_value self) {
         #endif
         image->image = LoadImage(filename);
         image->name = filename;
+        image->tex = LoadTextureFromImage(image->image);
         break;
     case 3:
         cColor = DATA_PTR(color);
         image->image = GenImageColor(mrb_int(mrb, param), height, *cColor); 
+        image->tex = LoadTextureFromImage(image->image);
     default:
         mrb_free(mrb, image);
         mrb_raise(mrb, E_ARGUMENT_ERROR, WRONG_NUMBER_ARGS);
@@ -61,8 +63,22 @@ static mrb_value mrgss_bitmap_initialize(mrb_state* mrb, mrb_value self) {
     return self;
 }
 
+static mrb_value mrgss_bitmap_width_get(mrb_state* mrb, mrb_value self) {
+    MR_Bitmap* bmp = DATA_PTR(self);
+    return mrb_fixnum_value(bmp->image.width);
+}
+
+static mrb_value mrgss_bitmap_height_get(mrb_state* mrb, mrb_value self) {
+    MR_Bitmap* bmp = DATA_PTR(self);
+    return mrb_fixnum_value(bmp->image.height);
+}
+
+
 
 void mrgss_bitmap_init(mrb_state *mrb) {
     struct RClass* mrb_bitmap = mrgss_class_new(mrb, "Bitmap");
     mrb_define_method(mrb, mrb_bitmap, "initialize", mrgss_bitmap_initialize, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(2));
+    mrb_define_method(mrb, mrb_bitmap, "width", mrgss_bitmap_width_get, MRB_ARGS_NONE());
+    mrb_define_method(mrb, mrb_bitmap, "height", mrgss_bitmap_height_get, MRB_ARGS_NONE());
+
 }
