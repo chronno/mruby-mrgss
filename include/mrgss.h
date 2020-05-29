@@ -1,15 +1,22 @@
 #include <mruby.h>
+#include <mrgss/structs.h>
 #ifndef MRUBY_MRGSS_H
 #define MRUBY_MRGSS_H
 /*
  * MRuby Types Initialization
 */
-void mrgss_point_init(mrb_state* mrb);
-void mrgss_rectangle_init(mrb_state* mrb);
-void mrgss_color_init(mrb_state* mrb);
-void mrgss_game_init(mrb_state* mrb);
-void mrgss_keyboard_init(mrb_state* mrb);
-void mrgss_sprite_init(mrb_state *mrb);
-void mrgss_bitmap_init(mrb_state *mrb);
+int create_screen(GameContext* game, mrb_int width, mrb_int height, char* title);
+void show_screen(GameContext* game);
+void destroy_screen(GameContext* game);
 
+/*
+**  Renderer
+*/
+void initialize_renderer(GameContext* game);
+void renderer_draw(GameContext* context);
+
+/*
+** Sprite stuff
+*/
+void sync_sprite(mrb_state* mrb, mrb_value sprite);
 #endif //MRUBY_MRGSS_H

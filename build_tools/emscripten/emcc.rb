@@ -34,11 +34,11 @@
       end
 
       def all_dependencies
-        @all_dependencies ||= [raylib]
+        @all_dependencies ||= [kazmath]
       end
       
       def libraries
-        %w[raylib]
+        %w[kazmath]
       end
 
     end

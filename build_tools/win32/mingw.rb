@@ -5,13 +5,10 @@ module Builder
         'Windows using MinGW'
       end
 
-      def raylib_library
-        'libraylib_static.a'
-      end
 
       def libraries
         %w[
-          raylib_static kernel32 user32 shell32 winmm gdi32 opengl32 ws2_32
+          glfw3 kazmath kernel32 user32 shell32 winmm gdi32 opengl32 ws2_32
         ]
       end
 

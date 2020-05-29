@@ -15,7 +15,6 @@ mrb_value mrgss_iv_get(mrb_state *mrb, mrb_value object, const char* name) {
     return mrb_iv_get(mrb, object, symbol);
 }
 
-
 struct RClass* mrgss_module(mrb_state *mrb) {
     return mrb_module_get(mrb, "MRGSS");
 }

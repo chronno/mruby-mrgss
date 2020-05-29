@@ -23,12 +23,16 @@ module Builder
       @raylib ||= Builder::Dependencies::Raylib.new(self)
     end
 
+    def kazmath
+      @kazmath ||= Builder::Dependencies::Kazmath.new(self)
+    end
+
     def library_paths
       all_dependencies.map(&:lib_dir)
     end
 
     def libraries
-      %w[raylib]
+      %w[glfw kazmath]
     end
 
     def glfw_cmake_flags
@@ -52,6 +56,15 @@ module Builder
         "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
         '-DSUPPORT_FILEFORMAT_BMP=ON',
         '-DSUPPORT_FILEFORMAT_JPG=ON',
+      ]
+    end
+
+    def kazmath_cmake_flags
+      [
+        '-DKAZMATH_BUILD_TESTS=OFF',
+        '-DKAZMATH_BUILD_JNI_WRAPPER=OFF',
+        '-DKAZMATH_BUILD_LUA_WRAPPER=OFF',
+        "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}"
       ]
     end
 
@@ -90,12 +103,16 @@ module Builder
       'libraylib.a'
     end
 
+    def kazmath_library
+      
+    end
+
     def gl3w_library
       
     end
 
     def all_dependencies
-      @all_dependencies ||= [raylib]
+      @all_dependencies ||= [ glfw, gl3w, kazmath ]
     end
 
     def files

@@ -7,7 +7,7 @@ module Builder
 
       def libraries
         %w[
-          raylib z m dl pthread X11 xcb GL Xext Xau Xdmcp
+          glfw3 kazmath z m dl pthread X11 xcb GL Xext Xau Xdmcp
         ]
       end
 

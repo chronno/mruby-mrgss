@@ -2,38 +2,24 @@ include MRGSS
 begin
     class Test < Game
         def start
-            @sprites = []
-            @frame = 0;
-            @bmp = MRGSS::Bitmap.new("noblend.png")
-        end
-
-            
-        def build(i)
-            i.times do |f|
-                spr = MRGSS::Sprite.new(@bmp)
-                spr.x = (@bmp.width * @sprites.size) % 800
-                spr.y = (@bmp.width * @sprites.size) / 800
-                @sprites.push(spr)
-            end
+            sprite = Sprite.new
+            p sprite
+            bitmap = Bitmap.new("resources/groot.png")
+            p bitmap
+            sprite.bitmap = bitmap
+            p sprite.src_rect
         end
 
         def update
-            @frame +=1
-            build(10000000) if @sprites.empty?
-		    # if(@sprites.size < 1000) 
-			#     build(1000)
-		    # end
-		    # p @frame
+
         end
 
         def render
-            # for item in @sprites
-            #     item.draw
-            # end
-            
+         
         end
     end
-    game = Test.new("a game", 800, 800, false)
+
+    game = Test.new(1024, 1024, "a game")
     game.run
 rescue Exception => e
     p e

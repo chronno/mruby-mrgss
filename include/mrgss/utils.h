@@ -1,9 +1,9 @@
+#ifndef MRUBY_MRGSS_UTILS_H
+#define MRUBY_MRGSS_UTILS_H
 #include <mruby.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
-#define WRONG_TYPE_ARGS            "Wrong type of arguments"
-#define WRONG_NUMBER_ARGS            "Wrong number of arguments"
 
 #define MRG_SET_PROP(name, value)\
     mrgss_iv_set(mrb, self, name,value)
@@ -14,6 +14,8 @@
 #define MRG_GET_PROP_FROM(target, name)\
     mrgss_iv_get(mrb, target, name)
 
+#define MRG_GET_PROP_AS_FLOAT(target, name)\
+    mrb_float(mrgss_iv_get(mrb, target, name))
 /*
  * MRGSS utils
 */
@@ -38,4 +40,6 @@ void mrgss_iv_set(mrb_state *mrb, mrb_value object, const char* name, mrb_value 
 */
 #ifdef __EMSCRIPTEN__
 void mrgss_emsc_fetch_file(const char * filename);
+#endif
+
 #endif
