@@ -1,5 +1,4 @@
-#include <mruby.h>
-#include <mrb_mrgss.h>
+#include <mrgss.h>
 
 #define DONE mrb_gc_arena_restore(mrb, 0);
 

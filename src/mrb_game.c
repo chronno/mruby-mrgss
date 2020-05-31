@@ -1,12 +1,4 @@
-#include <mruby.h>
-#include <mruby/data.h>
-#include <mruby/variable.h>
-#include <mruby/array.h>
-#include <mrb_mrgss.h>
 #include <mrgss.h>
-#include <mrgss/structs.h>
-#include <mrgss/utils.h>
-
 
 static void game_free(mrb_state *mrb, void *p) {
     if (p) {
@@ -34,8 +26,6 @@ static mrb_value initialize(mrb_state* mrb, mrb_value self) {
     if (create_screen(game, w,h,title)) {
         DATA_TYPE(self) = &game_data_type;
         DATA_PTR(self) = game;
-        MRG_SET_PROP("drawables", mrb_ary_new(mrb));
-        mrb_gv_set(mrb, mrb_intern_lit(mrb, "$MRGSS"), self);
     } else {
         mrb_free(mrb, game);
         mrb_raise(mrb, E_RUNTIME_ERROR, "Couldn't start the game");

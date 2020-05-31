@@ -46,7 +46,7 @@ end
 #     '-s ASYNCIFY=1',
 #     '-s WASM=0',
 #     '-s USE_GLFW=3',
-#     '-s USE_REGAL=1',
+#     #'-s USE_REGAL=1',
 #     '--use-preload-plugins',
 #     '-s FORCE_FILESYSTEM=1',
 #     '-O3'
@@ -59,7 +59,7 @@ end
 #     '-s USE_GLFW=3',
 #     # '-s FULL_ES2=1',
 #     # '-s FULL_ES3=1',
-#     '-s USE_REGAL=1',
+#     #'-s USE_REGAL=1',
 #     '--use-preload-plugins',
 #     '-s FORCE_FILESYSTEM=1',
 #     '-O3'

@@ -26,5 +26,5 @@ void sync_sprite(mrb_state* mrb, mrb_value sprite) {
     csprite->vertexData.vertices[3].y = csprite->y + csprite->rh;
     csprite->vertexData.vertices[3].u = csprite->rx / (float)MAX_IMG_SIZE;
     csprite->vertexData.vertices[3].v = (csprite->ry + csprite->rh) / (float)MAX_IMG_SIZE;
-
+    csprite->dirty = GL_TRUE;
 }

@@ -1,13 +1,5 @@
-#include <stdlib.h>
-#include <mruby.h>
-#ifdef __EMSCRIPTEN__
-#include <emscripten/emscripten.h>
-#else
-#include <gl/gl3w.h>
-#endif
-#include <GLFW/glfw3.h>
 #include <mrgss.h>
-#include <mrgss/structs.h>
+
 
 static void configure_window() {
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -19,16 +11,19 @@ static void configure_window() {
 int create_screen(GameContext* game, mrb_int width, mrb_int height, char* title) {
     if(glfwInit()) { 
         configure_window();
+        
         game->window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (game->window != NULL) {
             glfwMakeContextCurrent(game->window);
             #ifndef __EMSCRIPTEN__
             if(gl3wInit()) { return FALSE; }
-            #endif    
+            #endif
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glfwSetWindowUserPointer(game->window, game);
             game->renderer = mrb_malloc(game->mrb, sizeof(GameRenderer));
+            glGetIntegerv(GL_MAJOR_VERSION, &game->renderer->glMajor);
+            glGetIntegerv(GL_MINOR_VERSION , &game->renderer->glMinor);
             initialize_renderer(game);
             return TRUE;            
         }
@@ -61,14 +56,22 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 }
 
 static void main_loop(GameContext* game) {
+    mrb_value drawables;
+    mrb_state* mrb = game->mrb;
+    mrb_int toRender = 0;
+    drawables = MRG_GET_PROP_FROM(game->batch, "@drawables");
     if (!glfwWindowShouldClose(game->window)) {
         glfwPollEvents();
         mrb_funcall(game->mrb, game->game, "update", 0);
-        glClearColor(0, 0, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //should render here
-        renderer_draw(game);
-        glfwSwapBuffers(game->window);
+        mrb_funcall(mrb, drawables, "clear", 0);
+        mrb_funcall(game->mrb, game->game, "render", 1, game->batch);
+        toRender = prepare_renderer(game, game->batch);
+        if (toRender > 0) {
+            glClearColor(0, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            renderer_draw(game, RARRAY_LEN(drawables));
+            glfwSwapBuffers(game->window);
+        }
     } else {
         #ifdef __EMSCRIPTEN__
         emscripten_cancel_main_loop();
@@ -77,8 +80,8 @@ static void main_loop(GameContext* game) {
 }
 
 
-
 void show_screen(GameContext* game) {
+    game->batch =  mrgss_instance_new(game->mrb, "Batch", 0, NULL);
     glfwSetKeyCallback(game->window, key_callback);
     glfwSetCharCallback(game->window, character_callback);
     glfwSetCursorPosCallback(game->window, cursor_position_callback);

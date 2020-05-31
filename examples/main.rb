@@ -1,21 +1,23 @@
 include MRGSS
+#
+# los sprites no deberian auto registrarse para ser dibujados deberia poder elegir cuales van a ser dibujados
+# resolver este problema implica tambien evitar la necesidad de mantener el contexto del juego en una gb
+#
 begin
     class Test < Game
         def start
-            sprite = Sprite.new
-            p sprite
-            bitmap = Bitmap.new("resources/groot.png")
-            p bitmap
-            sprite.bitmap = bitmap
-            p sprite.src_rect
+            rect = Rect.new(0,5,10,15)
+            print "Rect: #{rect}\nX:#{rect.x}\nY:#{rect.y}\nWidth:#{rect.width}\nHeight:#{rect.height}"
+
         end
 
+       
         def update
-
+          
         end
 
-        def render
-         
+        def render(batch) 
+          
         end
     end
 
