@@ -1,26 +1,24 @@
-#include <stdio.h>
-#include <stdlib.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <vendor/stb_mage.h>
-#ifndef __EMSCRIPTEN__
-#include <GL/gl3w.h>
-#else 
-#include <GL/Regal.h>
-#endif
-#include <mrgss/gl.h>
-#include <mrgss/utils.h>
-#include <mrgss/structs.h>
-
+#include <mrgss.h>
 
 const char* VertexShader = "#version 430 core\n"
+"struct Args\n"
+"{\n"          
+    "mat4 params;\n"
+    "mat4 modelView;\n"
+"};\n"
 "layout (location = 0 ) in vec2 position;\n"
 "layout (location = 1 ) in vec2 texCoord;\n"
+"layout (std430, binding=0) buffer shader_data {" 
+    "Args args[];"
+"};"
 "uniform mat4 orthoView;" \
 "out vec3 uv;\n"
 "void main(void)\n"
 "{\n"
-    "gl_Position = orthoView * vec4(position.x, position.y, 0.0,1.0);\n"
-    "uv = vec3(texCoord, floor(gl_VertexID / 4));\n"
+    "gl_Position = orthoView * args[gl_VertexID / 4].modelView * vec4(position.x, position.y, 0.0, 1.0);\n"
+    "uv = vec3(texCoord, args[gl_VertexID / 4].params[0][0]);\n"
 "}\n";
 
 const char* FragmentShader = "#version 430 core\n"
@@ -91,10 +89,11 @@ void bitmap_from_file(Bitmap* bmp, char* filename) {
 
 
 
-void register_bitmap(GameContext* context, Bitmap* bitmap) {
+int register_bitmap(GameContext* context, Bitmap* bitmap) {
     if (bitmap->layer == -1) {
         glTexSubImage3D( GL_TEXTURE_2D_ARRAY, 0, 0, 0, context->renderer->txc, bitmap->width, bitmap->height ,1, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->data);
         bitmap->layer = context->renderer->txc;
         context->renderer->txc += 1; 
     }
+    return bitmap->layer;
 }

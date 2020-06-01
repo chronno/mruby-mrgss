@@ -1,7 +1,5 @@
 #include <mrgss.h>
 
-
-
 static const struct mrb_data_type rect_data_type = {
   "MRGSS::Rect", mrb_free
 };
@@ -10,28 +8,28 @@ static mrb_value initialize(mrb_state *mrb, mrb_value self) {
     Rect *rect;
     mrb_int args, x, y, w, h;
     args = mrb_get_args(mrb, "|iiii", &x, &y, &w, &h);
-    rect = mrb_malloc(mrb, sizeof(rect));
+    rect = mrb_malloc(mrb, sizeof(Rect));
     switch (args) {
     case 0:
         rect->x = 0;
         rect->y = 0;
         rect->w = 0;
         rect->h = 0;
+        DATA_PTR(self) = rect;
+        DATA_TYPE(self) = &rect_data_type;
         break;
     case 4:
         rect->x = x;
         rect->y = y;
         rect->w = w;
         rect->h = h;
+        DATA_PTR(self) = rect;
+        DATA_TYPE(self) = &rect_data_type;
         break;
     default:
-        mrb_free(mrb, rect);
         mrb_raise(mrb, E_ARGUMENT_ERROR, "WRONG_NUMBER_ARGS");
-        return mrb_nil_value();
         break;
     }
-    DATA_PTR(self) = rect;
-    DATA_TYPE(self) = &rect_data_type;
     return self;
 }
 
@@ -86,7 +84,6 @@ static mrb_value get_h(mrb_state* mrb, mrb_value self) {
     Rect* rect = DATA_PTR(self);
     return mrb_fixnum_value(rect->h);
 }
-
 
 void create_rect_type(mrb_state* mrb) {
     struct RClass* type = mrgss_class_new(mrb, "Rect");

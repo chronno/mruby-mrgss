@@ -71,12 +71,12 @@ static mrb_value get_a(mrb_state* mrb, mrb_value self) {
 void create_color_type(mrb_state* mrb) {
     struct RClass* type = mrgss_class_new(mrb, "Color");
     mrb_define_method(mrb, type, "initialize", initialize, MRB_ARGS_OPT(4));
-    mrb_define_method(mrb, type, "g=", set_r, MRB_ARGS_REQ(1));
-    mrb_define_method(mrb, type, "g=", set_g, MRB_ARGS_REQ(1));
-    mrb_define_method(mrb, type, "b=", set_b, MRB_ARGS_REQ(1));
-    mrb_define_method(mrb, type, "a=", set_a, MRB_ARGS_REQ(1));
-    mrb_define_method(mrb, type, "r", get_r, MRB_ARGS_REQ(1));
-    mrb_define_method(mrb, type, "g", get_g, MRB_ARGS_REQ(1));
-    mrb_define_method(mrb, type, "b", get_b, MRB_ARGS_REQ(1));
-    mrb_define_method(mrb, type, "a", get_a, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "red=", set_r, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "green=", set_g, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "blue=", set_b, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "alpha=", set_a, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "red", get_r, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "green", get_g, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "blue", get_b, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "alpha", get_a, MRB_ARGS_REQ(1));
 }

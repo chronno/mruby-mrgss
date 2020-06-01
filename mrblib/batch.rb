@@ -8,5 +8,9 @@ module MRGSS
         def add(object)
             @drawables.push(object);
         end
+
+        def reset
+            @drawables.clear
+        end
     end
 end

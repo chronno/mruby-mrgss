@@ -11,10 +11,12 @@ static mrb_value initialize(mrb_state *mrb, mrb_value self) {
     point = mrb_malloc(mrb, sizeof(Point));
     switch (args) {
     case 0:
-        *point = (Point){.x = 0, .y = 0};
+        point->x = 0;
+        point->y = 0;
         break;
-    case 4:
-        *point = (Point){.x = x, .y = y};
+    case 2:
+        point->x = x;
+        point->y = y;
         break;
     default:
         mrb_free(mrb, point);
@@ -57,7 +59,7 @@ static mrb_value get_y(mrb_state* mrb, mrb_value self) {
 
 void create_point_type(mrb_state* mrb) {
     struct RClass* type = mrgss_class_new(mrb, "Point");
-    mrb_define_method(mrb, type, "initialize", initialize, MRB_ARGS_OPT(4));
+    mrb_define_method(mrb, type, "initialize", initialize, MRB_ARGS_OPT(2));
     mrb_define_method(mrb, type, "x=", set_x, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, type, "y=", set_y, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, type, "x", get_x, MRB_ARGS_REQ(1));

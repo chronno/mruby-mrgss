@@ -55,21 +55,21 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
     // mrb_funcall(MRUBY, mouse, "update_buttons", 2, mrb_fixnum_value(button), mrb_fixnum_value(action));
 }
 
+// batch needs to be a freeable array or it will leak until mruby GC purges
+
 static void main_loop(GameContext* game) {
-    mrb_value drawables;
-    mrb_state* mrb = game->mrb;
-    mrb_int toRender = 0;
-    drawables = MRG_GET_PROP_FROM(game->batch, "@drawables");
+    int toRender = 0;
     if (!glfwWindowShouldClose(game->window)) {
         glfwPollEvents();
         mrb_funcall(game->mrb, game->game, "update", 0);
-        mrb_funcall(mrb, drawables, "clear", 0);
+        mrb_funcall(game->mrb, game->batch, "reset", 0);
+        //mrb_full_gc(game->mrb);
         mrb_funcall(game->mrb, game->game, "render", 1, game->batch);
         toRender = prepare_renderer(game, game->batch);
         if (toRender > 0) {
             glClearColor(0, 0, 0, 1);
             glClear(GL_COLOR_BUFFER_BIT);
-            renderer_draw(game, RARRAY_LEN(drawables));
+            renderer_draw(game, toRender);
             glfwSwapBuffers(game->window);
         }
     } else {
@@ -77,6 +77,7 @@ static void main_loop(GameContext* game) {
         emscripten_cancel_main_loop();
         #endif
     }
+
 }
 
 

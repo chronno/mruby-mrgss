@@ -1,13 +1,17 @@
 #ifndef MRUBY_MRGSS_H
 #define MRUBY_MRGSS_H
+#include <stdlib.h>
+#include <string.h>
 #include <mruby.h>
 #include <mruby/data.h>
+#include <mruby/array.h>
 #ifndef __EMSCRIPTEN__
 #include <GL/gl3w.h>
 #else 
 #include <emscripten/emscripten.h>
 #endif
 #include <GLFW/glfw3.h>
+#include <kazmath.h>
 #include <mrgss/utils.h>
 #include <mrgss/gl.h>
 #include <mrgss/types.h>
@@ -18,7 +22,9 @@
 */
 void create_color_type(mrb_state* mrb);
 void create_point_type(mrb_state* mrb);
+
 void create_rect_type(mrb_state* mrb);
+
 void create_game_type(mrb_state* mrb);
 void create_bitmap_type(mrb_state* mrb);
 void create_sprite_type(mrb_state* mrb);
@@ -48,5 +54,6 @@ void renderer_draw(GameContext* context, int renderables);
 /*
 ** Sprite stuff
 */
-void sync_sprite(mrb_state* mrb, mrb_value sprite);
+void sync_sprite_position(mrb_state* mrb, mrb_value sprite);
+void sync_sprite_transforms(Sprite *sprite);
 #endif //MRUBY_MRGSS_H
