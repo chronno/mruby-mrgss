@@ -85,6 +85,51 @@ static mrb_value get_h(mrb_state* mrb, mrb_value self) {
     return mrb_fixnum_value(rect->h);
 }
 
+static mrb_value empty(mrb_state* mrb, mrb_value self) {
+    Rect* rect = DATA_PTR(self);
+    rect->x = 0;
+    rect->y = 0;
+    rect->w = 0;
+    rect->h = 0;
+    return self;
+}
+
+static mrb_value set(mrb_state* mrb, mrb_value self) {
+    mrb_value arg;
+    mrb_int args, y,w,h;
+    Rect *rect, *other;
+    args = mrb_get_args(mrb, "o|iii", &arg, &y, &w, &h);
+    rect = DATA_PTR(self);
+    switch (args) {
+    case 1:
+        if (mrgss_obj_is_a(mrb, arg, "Rect")) {
+            
+            other = DATA_PTR(arg);
+            rect->x = other->x;
+            rect->y = other->y;
+            rect->w = other->w;
+            rect->h = other->h;
+        } else {
+            mrb_raise(mrb, E_ARGUMENT_ERROR, "Rect expected");
+        }
+        break;
+    case 4:
+        if (is_number(mrb, arg)) {
+            rect->x = mrb_int(mrb, arg);
+            rect->y = y;
+            rect->w = w;
+            rect->h = h;
+        } else {
+            mrb_raise(mrb, E_ARGUMENT_ERROR, "Number expected");
+        }
+        break;
+    default:
+        mrb_raise(mrb, E_ARGUMENT_ERROR, "Number expected");
+        break;
+    }
+    return self;
+}
+
 void create_rect_type(mrb_state* mrb) {
     struct RClass* type = mrgss_class_new(mrb, "Rect");
     mrb_define_method(mrb, type, "initialize", initialize, MRB_ARGS_OPT(4));
@@ -96,4 +141,6 @@ void create_rect_type(mrb_state* mrb) {
     mrb_define_method(mrb, type, "y", get_y, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, type, "width", get_w, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, type, "height", get_h, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "empty", empty, MRB_ARGS_NONE());
+    mrb_define_method(mrb, type, "set", set, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
 }
