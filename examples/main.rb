@@ -5,12 +5,10 @@ begin
         def start
             @sprites = []
             @bitmap = Bitmap.new("resources/sheet.png")
-            @count = 0
-            @first_time = true
+            build_sprite(1)
         end
 
         def build_sprite(quants)
-            return if @sprites.size >= 100000
             quants.times do |new|
                 sprite = Sprite.new(viewport)
                 sprite.bitmap = @bitmap
@@ -21,25 +19,14 @@ begin
                 sprite.y = (@sprites.size * 28 / 1036).to_i * 48
                 @sprites.push(sprite)
             end
-            print "#{@sprites.size}\n"
         end
 
         def update
-            
-            @count += 1
-            if (@count % 20 == 0)
-                build_sprite(100)
-                @count = 0
-                if(@sprites.size == 100000)
-                    @sprites.each do |sprite|
-                        sprite.angle += 1
-                        rect = sprite.src_rect
-                        rect.x += 144
-                        rect.x %= 576
-                        sprite.src_rect = rect
-                    end
-                end
+            if Mouse.click?(Mouse::BUTTON_LEFT)
+                @sprites[0].x = Mouse.x - 72
+                @sprites[0].y = Mouse.y - 48
             end
+            print Mouse.press_time?(Mouse::BUTTON_LEFT)
         end
     end
 

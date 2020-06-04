@@ -77,6 +77,7 @@ static void main_loop(GameContext* game) {
 
 
 void show_screen(GameContext* game) {
+    glfwSetWindowUserPointer(game->window, game);
     glfwSetKeyCallback(game->window, key_callback);
     glfwSetCharCallback(game->window, character_callback);
     glfwSetCursorPosCallback(game->window, cursor_position_callback);
