@@ -13,7 +13,7 @@ extern const char* FragmentShader;
 GLuint compile_shader(const char *shader, int type);
 GLuint compile_shader_program(GLuint vertexShader, GLuint fragmentShader);
 void bitmap_from_file(Bitmap* bmp, char* filename);
-int register_bitmap(GameContext* context, Bitmap* bitmap);
+int register_bitmap(GameRenderer* context, Bitmap* bitmap);
 
 
 #endif

@@ -18,6 +18,8 @@ typedef struct mrgss_quad {
 } Quad2D;
 
 typedef struct mrgss_renderer {
+    GLuint width;
+    GLuint height;
     GLuint vao; //vertex array object pointer
     GLuint vbo; //vertex buffer object pointer
     GLuint ssbo; //shader storage buffer object should save all the params needed to fill the shader per sprite
@@ -28,13 +30,14 @@ typedef struct mrgss_renderer {
     GLint glMinor;
     Quad2D* persistentVertexBuffer; // this should work as a Vertex2D array that will be streamming to the videoboard
     ShaderParams* persistentShaderBuffer;
+    GLboolean dirty;
+    GLuint freeSpots;
 } GameRenderer;
 
 typedef struct mrgss_context {
     mrb_state *mrb;
-    mrb_value game, batch;
+    mrb_value game;
     GLFWwindow* window;
-    GameRenderer* renderer;
 } GameContext;
 
 typedef struct mrgss_rect { 
@@ -55,14 +58,16 @@ typedef struct mrgss_bitmap {
 } Bitmap;
 
 typedef struct mrgss_sprite {
-    Quad2D vertexData;
-    ShaderParams shaderParams;
     Point* position; //position
     Point* zoom; //zoom applied in x and y axis
     Point* origin; //the origin is mainly used for rotation
     mrb_int angle; //basically the angle for rotation 0 by default
     Rect* src_rect; //src rect
-    GLboolean dirty; // should be used to know when to redraw
+    GLboolean dirtyPosition; // should be used to know when to redraw
+    GLboolean dirtyTransforms; // should be used to know when to redraw
+    GLboolean marked;
+    GLuint index;
+    
 } Sprite;
 
 

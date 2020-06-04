@@ -49,14 +49,6 @@ mrb_bool is_boolean(mrb_state* mrb, mrb_value obj) {
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
-// void onload(const char * filename) {
-//     printf("file %s was loaded", filename);
-// }
-
-// void onerror(const char * filename) {
-//     printf("file %s failed to load", filename);
-// }
-
 
 void mrgss_emsc_fetch_file(const char* filename) {
     char* host = emscripten_run_script_string("/.*(?=\\/\\w*)/.exec(window.location.href).join() + '/'");

@@ -40,12 +40,10 @@ static void buildTexturesBuffer(GameRenderer* renderer) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
-static void buildProjectionMatrix(GameContext *context) {
+static void buildProjectionMatrix(GameRenderer* renderer) {
     kmMat4 ortho2D;
-    GLint width, height;
-    glfwGetWindowSize(context->window, &width, &height);
-    kmMat4OrthographicProjection(&ortho2D, 0.0f, width, height, 0.0f, 0.0f, 1.0f);
-    glUniformMatrix4fv(glGetUniformLocation(context->renderer->spp, "orthoView"), 1, GL_FALSE, ortho2D.mat);
+    kmMat4OrthographicProjection(&ortho2D, 0.0f, (float)renderer->width, (float)renderer->height, 0.0f, 0.0f, 1.0f);
+    glUniformMatrix4fv(glGetUniformLocation(renderer->spp, "orthoView"), 1, GL_FALSE, ortho2D.mat);
 }
 
 static void loadDefaultShader(GameRenderer* renderer) {
@@ -55,13 +53,17 @@ static void loadDefaultShader(GameRenderer* renderer) {
     renderer->spp = compile_shader_program(vId, fId);
 }
 
-void initialize_renderer(GameContext* context) {
-    context->renderer->txc = 0;
-    loadDefaultShader(context->renderer); //loads and enables default shader shall i let other users to modify this?
-    buildVertexBuffer(context->renderer); //this should enable data transfer between the renderer persistent vertex buffer and the video board
-    buildShaderParamsBuffer(context->renderer); //this should enable several params to the shader
-    buildTexturesBuffer(context->renderer); //this should reduce texture transfers and state switching while drawing a batch
-    buildProjectionMatrix(context); // we should use orthographic projection always in order to render 2d 
+void initialize_renderer(GameRenderer* renderer) {
+    glGetIntegerv(GL_MAJOR_VERSION, &renderer->glMajor);
+    glGetIntegerv(GL_MINOR_VERSION , &renderer->glMinor);
+    renderer->txc = 0;
+    renderer->freeSpots = 0;
+    renderer->dirty = FALSE;
+    loadDefaultShader(renderer); //loads and enables default shader shall i let other users to modify this?
+    buildVertexBuffer(renderer); //this should enable data transfer between the renderer persistent vertex buffer and the video board
+    buildShaderParamsBuffer(renderer); //this should enable several params to the shader
+    buildTexturesBuffer(renderer); //this should reduce texture transfers and state switching while drawing a batch
+    buildProjectionMatrix(renderer); // we should use orthographic projection always in order to render 2d 
 }
 
 int printOglError(const char *method) {
@@ -95,42 +97,54 @@ void mrgss_renderer_wait_for_gl_lock() {
     }
 }
 
-int prepare_renderer(GameContext* context, mrb_value batch) {
-    int counter;
+int prepare_renderer(GameContext* context) {
     mrb_value drawables;
     mrb_value rsprite, rbitmap;
     Sprite *sprite;
-    mrb_state* mrb = context->mrb;
-    counter = 0;
-    drawables = MRG_GET_PROP_FROM(batch, "@drawables");
+    mrb_state *mrb = context->mrb;
+    mrb_value viewport = MRG_GET_PROP_FROM(context->game, "@viewport");
+    GameRenderer* renderer = DATA_PTR(viewport);
+    if (!renderer->dirty) {
+        return 0;
+    }
+    
+    drawables = MRG_GET_PROP_FROM(viewport, "@dirty_drawables");
     /////check if renderer needs sorting
-    counter = RARRAY_LEN(drawables);
     mrgss_renderer_wait_for_gl_lock();
+    
     for(int i = 0; i < RARRAY_LEN(drawables); i++) {/////check if renderer is in sync with sprites to draw
         rsprite = mrb_ary_entry(drawables, i);
         sprite = DATA_PTR(rsprite);
-        if(sprite->dirty) {
+        if (sprite->dirtyPosition) {
             rbitmap = MRG_GET_PROP_FROM(rsprite, "@bitmap");
-            context->renderer->persistentShaderBuffer[i].params[0] = (float)register_bitmap(context, DATA_PTR(rbitmap));
-            context->renderer->persistentShaderBuffer[i].params[1] = 0;           
-            memcpy(&(context->renderer->persistentShaderBuffer[i].transforms), &(sprite->shaderParams.transforms), sizeof(GLfloat) * 16); 
-            context->renderer->persistentVertexBuffer[i] = sprite->vertexData;
-            sprite->dirty = FALSE;
-            // printf("%i :[%f, %f][%f, %f][%f, %f][%f, %f]\n", i,
-            //     context->renderer->persistentVertexBuffer[i].vertices[0].x,
-            //     context->renderer->persistentVertexBuffer[i].vertices[0].y,
-            //     context->renderer->persistentVertexBuffer[i].vertices[1].x,
-            //     context->renderer->persistentVertexBuffer[i].vertices[1].y,
-            //     context->renderer->persistentVertexBuffer[i].vertices[2].x,
-            //     context->renderer->persistentVertexBuffer[i].vertices[2].y,
-            //     context->renderer->persistentVertexBuffer[i].vertices[3].x,
-            //     context->renderer->persistentVertexBuffer[i].vertices[3].y
-            //     );
+            renderer->persistentShaderBuffer[sprite->index].params[0] = (float)register_bitmap(renderer, DATA_PTR(rbitmap));
+            sync_sprite_position(&(renderer->persistentVertexBuffer[sprite->index]), sprite);
+            sprite->dirtyPosition = FALSE;
+        } 
+        
+        if (sprite->dirtyTransforms) {
+            sync_sprite_transforms(&renderer->persistentShaderBuffer[sprite->index], sprite);
+            renderer->persistentShaderBuffer[sprite->index].params[1] = 0;
+            sprite->dirtyTransforms = FALSE;
         }
-        //memcpy(&(renderer->persistentShaderBuffer[i]), &sprite->transforms, sizeof(sprite->transforms)); 
+        sprite->marked = FALSE;
     }
-    
-    return counter;
+    renderer->dirty = FALSE;
+    mrb_ary_clear(mrb, drawables);
+    //     // printf("%i :[%f, %f][%f, %f][%f, %f][%f, %f]\n", i,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[0].x,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[0].y,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[1].x,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[1].y,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[2].x,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[2].y,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[3].x,
+    //         //     context->renderer->persistentVertexBuffer[i].vertices[3].y
+    //         //     );
+    // }
+    // printf("%i", counter);
+
+    return RARRAY_LEN(MRG_GET_PROP_FROM(viewport, "@drawables"));
 }
 
 
@@ -138,5 +152,4 @@ int prepare_renderer(GameContext* context, mrb_value batch) {
 void renderer_draw(GameContext* context, int renderables) {
     glDrawArrays(GL_QUADS, 0, renderables * 4);
     mrgss_renderer_lock_gl_buffer(); 
-    printOglError("render");
 }

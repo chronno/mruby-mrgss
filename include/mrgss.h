@@ -22,10 +22,9 @@
 */
 void create_color_type(mrb_state* mrb);
 void create_point_type(mrb_state* mrb);
-
 void create_rect_type(mrb_state* mrb);
-
 void create_game_type(mrb_state* mrb);
+void create_viewport_type(mrb_state* mrb);
 void create_bitmap_type(mrb_state* mrb);
 void create_sprite_type(mrb_state* mrb);
 /*
@@ -47,13 +46,13 @@ void destroy_screen(GameContext* game);
 /*
 **  Renderer
 */
-void initialize_renderer(GameContext* game);
-int prepare_renderer(GameContext* context, mrb_value batch);
+void initialize_renderer(GameRenderer* renderer);
+int prepare_renderer(GameContext* context);
 void renderer_draw(GameContext* context, int renderables);
 
 /*
 ** Sprite stuff
 */
-void sync_sprite_position(mrb_state* mrb, mrb_value sprite);
-void sync_sprite_transforms(Sprite *sprite);
+void sync_sprite_position(Quad2D* quad, Sprite* sprite);
+void sync_sprite_transforms(ShaderParams* shader, Sprite *sprite);
 #endif //MRUBY_MRGSS_H

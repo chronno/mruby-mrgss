@@ -9,8 +9,16 @@ module MRGSS
             @drawables.push(object);
         end
 
+        def sort
+            
+        end
+
         def reset
             @drawables.clear
         end
     end
 end
+
+
+
+

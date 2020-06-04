@@ -89,11 +89,11 @@ void bitmap_from_file(Bitmap* bmp, char* filename) {
 
 
 
-int register_bitmap(GameContext* context, Bitmap* bitmap) {
-    if (bitmap->layer == -1) {
-        glTexSubImage3D( GL_TEXTURE_2D_ARRAY, 0, 0, 0, context->renderer->txc, bitmap->width, bitmap->height ,1, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->data);
-        bitmap->layer = context->renderer->txc;
-        context->renderer->txc += 1; 
+int register_bitmap(GameRenderer* renderer, Bitmap* bitmap) {
+    if (bitmap && bitmap->layer == -1) {
+        glTexSubImage3D( GL_TEXTURE_2D_ARRAY, 0, 0, 0, renderer->txc, bitmap->width, bitmap->height ,1, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->data);
+        bitmap->layer = renderer->txc;
+        renderer->txc += 1; 
     }
     return bitmap->layer;
 }

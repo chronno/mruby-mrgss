@@ -11,7 +11,6 @@ static void configure_window() {
 int create_screen(GameContext* game, mrb_int width, mrb_int height, char* title) {
     if(glfwInit()) { 
         configure_window();
-        
         game->window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (game->window != NULL) {
             glfwMakeContextCurrent(game->window);
@@ -20,11 +19,6 @@ int create_screen(GameContext* game, mrb_int width, mrb_int height, char* title)
             #endif
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glfwSetWindowUserPointer(game->window, game);
-            game->renderer = mrb_malloc(game->mrb, sizeof(GameRenderer));
-            glGetIntegerv(GL_MAJOR_VERSION, &game->renderer->glMajor);
-            glGetIntegerv(GL_MINOR_VERSION , &game->renderer->glMinor);
-            initialize_renderer(game);
             return TRUE;            
         }
     }
@@ -55,17 +49,13 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
     // mrb_funcall(MRUBY, mouse, "update_buttons", 2, mrb_fixnum_value(button), mrb_fixnum_value(action));
 }
 
-// batch needs to be a freeable array or it will leak until mruby GC purges
-
 static void main_loop(GameContext* game) {
     int toRender = 0;
+    double start = glfwGetTime();
     if (!glfwWindowShouldClose(game->window)) {
         glfwPollEvents();
         mrb_funcall(game->mrb, game->game, "update", 0);
-        mrb_funcall(game->mrb, game->batch, "reset", 0);
-        //mrb_full_gc(game->mrb);
-        mrb_funcall(game->mrb, game->game, "render", 1, game->batch);
-        toRender = prepare_renderer(game, game->batch);
+        toRender = prepare_renderer(game);
         if (toRender > 0) {
             glClearColor(0, 0, 0, 1);
             glClear(GL_COLOR_BUFFER_BIT);
@@ -77,12 +67,12 @@ static void main_loop(GameContext* game) {
         emscripten_cancel_main_loop();
         #endif
     }
-
+    double end = glfwGetTime();
+    printf("Cicle time: %f\n", end - start);
 }
 
 
 void show_screen(GameContext* game) {
-    game->batch =  mrgss_instance_new(game->mrb, "Batch", 0, NULL);
     glfwSetKeyCallback(game->window, key_callback);
     glfwSetCharCallback(game->window, character_callback);
     glfwSetCursorPosCallback(game->window, cursor_position_callback);

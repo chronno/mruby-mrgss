@@ -8,6 +8,7 @@ void mrb_mruby_mrgss_gem_init(mrb_state *mrb) {
   create_point_type(mrb);
   create_rect_type(mrb);
   create_game_type(mrb);
+  create_viewport_type(mrb);
   create_bitmap_type(mrb);
   create_sprite_type(mrb);
   DONE;
