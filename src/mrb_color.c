@@ -67,6 +67,41 @@ static mrb_value get_a(mrb_state* mrb, mrb_value self) {
     return mrb_fixnum_value(color->a);
 }
 
+static mrb_value set(mrb_state* mrb, mrb_value self) {
+    mrb_value arg;
+    mrb_int args, g, b, a;
+    Color *color, *other;
+    args = mrb_get_args(mrb, "o|iii", &arg, &g, &b, &a);
+    color = DATA_PTR(self);
+    switch (args) {
+    case 1:
+        if (mrgss_obj_is_a(mrb, arg, "Color")) {
+            other = DATA_PTR(arg);
+            color->r = other->r;
+            color->g = other->g;
+            color->b = other->b;
+            color->a = other->a;
+        } else {
+            mrb_raise(mrb, E_ARGUMENT_ERROR, "Color expected");
+        }
+        break;
+    case 4:
+        if (is_number(mrb, arg)) {
+            color->r = mrb_int(mrb, arg);
+            color->g = g;
+            color->b = b;
+            color->a = a;
+        } else {
+            mrb_raise(mrb, E_ARGUMENT_ERROR, "Number expected");
+        }
+        break;
+    default:
+        mrb_raise(mrb, E_ARGUMENT_ERROR, "Number expected");
+        break;
+    }
+    return self;
+}
+
 
 void create_color_type(mrb_state* mrb) {
     struct RClass* type = mrgss_class_new(mrb, "Color");
@@ -79,4 +114,5 @@ void create_color_type(mrb_state* mrb) {
     mrb_define_method(mrb, type, "green", get_g, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, type, "blue", get_b, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, type, "alpha", get_a, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, type, "set", set, MRB_ARGS_REQ(1) | MRB_ARGS_OPT(3));
 }
