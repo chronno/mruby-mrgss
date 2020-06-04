@@ -30,23 +30,27 @@ void destroy_screen(GameContext* game) {
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    // mrb_value keyboard = mrb_obj_value(mrb_module_get_under(MRUBY, mrgss_module(MRUBY), "Keyboard"));
-    // mrb_funcall(MRUBY, keyboard, "update", 2, mrb_fixnum_value(key),mrb_fixnum_value(action));
+    GameContext* context = glfwGetWindowUserPointer(window);
+    mrb_value keyboard = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Keyboard"));
+    mrb_funcall(context->mrb, keyboard, "update", 2, mrb_fixnum_value(key),mrb_fixnum_value(action));
 }
 
 static void character_callback(GLFWwindow* window, unsigned int codepoint) {
-    // mrb_value keyboard = mrb_obj_value(mrb_module_get_under(MRUBY, mrgss_module(MRUBY), "Keyboard"));
-    // mrb_funcall(MRUBY, keyboard, "something", 1, mrb_fixnum_value(codepoint));
+    GameContext* context = glfwGetWindowUserPointer(window);
+    mrb_value keyboard = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Keyboard"));
+    mrb_funcall(context->mrb, keyboard, "something", 1, mrb_fixnum_value(codepoint));
 }
 
 static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
-    // mrb_value mouse = mrb_obj_value(mrb_module_get_under(MRUBY, mrgss_module(MRUBY), "Mouse"));
-    // mrb_funcall(MRUBY, mouse, "update_position", 2, mrb_fixnum_value(xpos), mrb_fixnum_value(ypos));
+    GameContext* context = glfwGetWindowUserPointer(window);
+    mrb_value mouse = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Mouse"));
+    mrb_funcall(context->mrb, mouse, "update_position", 2, mrb_fixnum_value(xpos), mrb_fixnum_value(ypos));
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    // mrb_value mouse = mrb_obj_value(mrb_module_get_under(MRUBY, mrgss_module(MRUBY), "Mouse"));
-    // mrb_funcall(MRUBY, mouse, "update_buttons", 2, mrb_fixnum_value(button), mrb_fixnum_value(action));
+    GameContext* context = glfwGetWindowUserPointer(window);
+    mrb_value mouse = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Mouse"));
+    mrb_funcall(context->mrb, mouse, "update_buttons", 2, mrb_fixnum_value(button), mrb_fixnum_value(action));
 }
 
 static void main_loop(GameContext* game) {
