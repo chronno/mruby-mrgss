@@ -29,12 +29,6 @@ void destroy_screen(GameContext* game) {
     glfwDestroyWindow(game->window);
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    GameContext* context = glfwGetWindowUserPointer(window);
-    mrb_value keyboard = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Keyboard"));
-    mrb_funcall(context->mrb, keyboard, "update", 2, mrb_fixnum_value(key),mrb_fixnum_value(action));
-}
-
 static void character_callback(GLFWwindow* window, unsigned int codepoint) {
     GameContext* context = glfwGetWindowUserPointer(window);
     mrb_value keyboard = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Keyboard"));
@@ -47,10 +41,18 @@ static void cursor_position_callback(GLFWwindow* window, double xpos, double ypo
     mrb_funcall(context->mrb, mouse, "update_position", 2, mrb_fixnum_value(xpos), mrb_fixnum_value(ypos));
 }
 
-static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    GameContext* context = glfwGetWindowUserPointer(window);
+static void update_input(GameContext *context) {
+    int i, state;
     mrb_value mouse = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Mouse"));
-    mrb_funcall(context->mrb, mouse, "update_buttons", 2, mrb_fixnum_value(button), mrb_fixnum_value(action));
+    mrb_value keyboard = mrb_obj_value(mrb_module_get_under(context->mrb, mrgss_module(context->mrb), "Keyboard"));
+    for (i = 0; i < 512; i++) {
+        state = glfwGetKey(context->window, i);
+        mrb_funcall(context->mrb, keyboard, "update", 2, mrb_fixnum_value(i),mrb_fixnum_value(state));
+    }
+    for (i = 0; i < 8; i++) {
+        state = glfwGetMouseButton(context->window, i);
+        mrb_funcall(context->mrb, mouse, "update_buttons", 2, mrb_fixnum_value(i), mrb_fixnum_value(state));
+    }
 }
 
 static void main_loop(GameContext* game) {
@@ -58,6 +60,7 @@ static void main_loop(GameContext* game) {
     double start = glfwGetTime();
     if (!glfwWindowShouldClose(game->window)) {
         glfwPollEvents();
+        update_input(game);
         mrb_funcall(game->mrb, game->game, "update", 0);
         toRender = prepare_renderer(game);
         if (toRender > 0) {
@@ -72,16 +75,14 @@ static void main_loop(GameContext* game) {
         #endif
     }
     double end = glfwGetTime();
-    printf("Cicle time: %f\n", end - start);
+    // printf("Cicle time: %f\n", end - start);
 }
 
 
 void show_screen(GameContext* game) {
     glfwSetWindowUserPointer(game->window, game);
-    glfwSetKeyCallback(game->window, key_callback);
     glfwSetCharCallback(game->window, character_callback);
     glfwSetCursorPosCallback(game->window, cursor_position_callback);
-    glfwSetMouseButtonCallback(game->window, mouse_button_callback);
     glfwShowWindow(game->window);
     mrb_funcall(game->mrb, game->game, "start", 0);
     #ifdef __EMSCRIPTEN__

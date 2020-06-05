@@ -52,10 +52,10 @@ module MRGSS
       # update the mouse buttons whenever something change
       #----------------------------------------------------------------------
       def self.update_buttons(button, action)
-        @trigger[button] = action == 1 and @time[button] == 0
+        @trigger[button] = action == 1 && @time[button] == 0
         @release[button] = action == 0 
         @time[button] = action == 1 ? @time[button] + 1 : 0
-        @press[button] = action != 0 and @time[button] > 1
+        @press[button] = action != 0 && @time[button] > 1
       end
       #----------------------------------------------------------------------
       # click?

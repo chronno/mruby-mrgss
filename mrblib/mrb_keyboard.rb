@@ -34,18 +34,17 @@ module MRGSS
       # keyboard status update
       #----------------------------------------------------------------------
       def self.update(key, action)
-        @trigger[key] = action == 1 and @time[key] == 0
+        @trigger[key] = action == 1 && @time[key] == 0
         @release[key] = action == 0 
         @time[key] = action == 1 ? @time[key] + 1 : 0
-        @repeat[key] = action == 2 and @time[key] % 2 == 0 
-        @press[key] = action != 0 and @time[key] > 1
+        @repeat[key] = action == 2 && @time[key] % 2 == 0 
+        @press[key] = action != 0 && @time[key] > 1
       end
       #----------------------------------------------------------------------
       # update character input
       #----------------------------------------------------------------------
       def self.method_missing(name, *args, &block)
        p args.pack("U").to_s
-        
       end
       #----------------------------------------------------------------------
       # Keys Constants
