@@ -11,6 +11,7 @@ void mrb_mruby_mrgss_gem_init(mrb_state *mrb) {
   create_viewport_type(mrb);
   create_bitmap_type(mrb);
   create_sprite_type(mrb);
+  create_audio_type(mrb);
   DONE;
 }
 

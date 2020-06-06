@@ -5,6 +5,8 @@ begin
         def start
             @sprites = []
             @bitmap = Bitmap.new("resources/sheet.png")
+            audio = Audio.new("resources/sound.mp3")
+            audio.play
             build_sprite(1)
         end
 
@@ -26,7 +28,6 @@ begin
                 @sprites[0].x = Mouse.x - 72
                 @sprites[0].y = Mouse.y - 48
             end
-            print Mouse.press_time?(Mouse::BUTTON_LEFT)
         end
     end
 

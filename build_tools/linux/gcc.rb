@@ -7,17 +7,22 @@ module Builder
 
       def libraries
         %w[
-          glfw3 kazmath z m dl pthread X11 xcb GL Xext Xau Xdmcp
+          soloud glfw3 kazmath z m dl pthread X11 xcb GL Xext Xau Xdmcp 
         ]
       end
 
       def toolchain_name
         'gcc'
       end
-
+      def soloud_cmake_flags
+        [
+          "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
+          '-DSOLOUD_BACKEND_SDL2=OFF',
+          '-DSOLOUD_BACKEND_ALSA=ON'
+        ]
+      end
       def linker_flags
         [
-          '-no-pie'
         ]
       end
     end

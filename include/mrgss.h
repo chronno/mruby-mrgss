@@ -27,6 +27,7 @@ void create_game_type(mrb_state* mrb);
 void create_viewport_type(mrb_state* mrb);
 void create_bitmap_type(mrb_state* mrb);
 void create_sprite_type(mrb_state* mrb);
+void create_audio_type(mrb_state* mrb);
 /*
 **
 */

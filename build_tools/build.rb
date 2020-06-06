@@ -27,12 +27,16 @@ module Builder
       @kazmath ||= Builder::Dependencies::Kazmath.new(self)
     end
 
+    def soloud
+      @soloud ||= Builder::Dependencies::SoLoud.new(self)
+    end
+
     def library_paths
       all_dependencies.map(&:lib_dir)
     end
 
     def libraries
-      %w[glfw kazmath]
+      %w[]
     end
 
     def glfw_cmake_flags
@@ -56,6 +60,13 @@ module Builder
         "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
         '-DSUPPORT_FILEFORMAT_BMP=ON',
         '-DSUPPORT_FILEFORMAT_JPG=ON',
+      ]
+    end
+
+    def soloud_cmake_flags
+      [
+        "-DCMAKE_TOOLCHAIN_FILE=#{toolchain}",
+        '-DSOLOUD_BACKEND_SDL2=OFF',
       ]
     end
 
@@ -103,6 +114,10 @@ module Builder
       'libraylib.a'
     end
 
+    def soloud_library
+      'libsoloud.a'
+    end
+
     def kazmath_library
       
     end
@@ -112,7 +127,7 @@ module Builder
     end
 
     def all_dependencies
-      @all_dependencies ||= [ glfw, gl3w, kazmath ]
+      @all_dependencies ||= [ glfw, gl3w, kazmath, soloud ]
     end
 
     def files

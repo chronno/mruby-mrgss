@@ -70,6 +70,4 @@ typedef struct mrgss_sprite {
     
 } Sprite;
 
-
-
 #endif
