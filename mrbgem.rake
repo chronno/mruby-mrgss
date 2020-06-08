@@ -36,7 +36,6 @@ MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   spec.linker.library_paths += platform.library_paths
   spec.linker.libraries += platform.libs
   spec.build.linker.library_paths += platform.library_paths
-  p platform.libs
   spec.build.linker.libraries += platform.libs
-  #spec.build.libmruby << platform.files
+  spec.build.libmruby << platform.files
 end

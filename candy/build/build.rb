@@ -56,7 +56,7 @@ module Candy
 
         def libs
             ary = [] 
-            ary << @dependencies.map{|dep| dep.name if dep.lib =~ /.*\.a$/}
+            ary << @dependencies.filter_map {|dep| dep.name if dep.lib =~ /.*\.a$/}
             ary << libraries
             ary.flatten
         end
