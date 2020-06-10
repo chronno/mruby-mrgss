@@ -1,4 +1,3 @@
-
 module Candy
     class Dependency
 
@@ -17,21 +16,13 @@ module Candy
             @env
         end
 
-        def fetch(dest)          #here we should try to clone download or whatever it requires
-            
-        end
-
         def compile(downloads_dir, toolchain)
             case @tool
             when "cmake"
                 Candy::CMake.new.compile(self, downloads_dir, toolchain)    
-            when "genie"
-                Candy::GENie.new.compile(self, downloads_dir, toolchain, env)
             else
                 raise "unknown tool: #{@tool}"
             end
-
-            
         end
 
         def join(join_dir)
@@ -52,7 +43,6 @@ module Candy
         def join_lib(join_dir, compilation_folder)
             find_file(compilation_folder).each do |file|
                 FileUtils.cp(file, File.join(join_dir, "lib")) if file =~ /.*\.a$/
-                FileUtils.cp(file, File.join(join_dir, "src")) if file =~ /.*\.c$/
             end
         end
 
@@ -78,6 +68,11 @@ module Candy
                 library_path << path if path =~ /#{@lib}/
             end
             library_path
+        end
+
+        def compiled?(join_dir)
+            return false if !File.exists?(join_dir)
+            !find_file(join_dir).empty?
         end
     end
 end

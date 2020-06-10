@@ -10,12 +10,8 @@ MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   #----------------------------------------------------------------------------
   platform = Candy::Platform.new.detect(self)
   platform.add_dependency("glfw3", 'git', "https://github.com/glfw/glfw.git", "../include", "libglfw3.a")
-  platform.add_dependency("gl3w", 'git', "https://github.com/skaslev/gl3w.git", "include", "gl3w.c")
   platform.add_dependency("kazmath", 'git', "https://github.com/Kazade/kazmath.git", "../kazmath", "libkazmath.a", ['-DKAZMATH_BUILD_TESTS=OFF','-DKAZMATH_BUILD_JNI_WRAPPER=OFF','-DKAZMATH_BUILD_LUA_WRAPPER=OFF'])
-  platform.add_dependency("soloud_static", 'git', "https://github.com/jarikomppa/soloud.git", "../include", "libsoloud_static.a", ["--with-miniaudio-only", "--with-tools", "gmake"], "genie")
-  platform.fetch
-  platform.compile
-  platform.join
+  platform.prepare
   #----------------------------------------------------------------------------
   # MRuby Dependencies
   #----------------------------------------------------------------------------
@@ -25,17 +21,10 @@ MRuby::Gem::Specification.new('mruby-mrgss') do |spec|
   #----------------------------------------------------------------------------
   # Compilation Flags
   #----------------------------------------------------------------------------
-  spec.cc.flags          << platform.flags
-  spec.build.cc.flags    << platform.flags
-  spec.cc.include_paths  << platform.include_paths
-  spec.cxx.include_paths << platform.include_paths
-  # include_dir = [File.join(dir, 'include'), File.join(dir, 'include', "**", "*.h") ]
-  # spec.build.cc.include_paths  += platform.include_paths + include_dir
-  # spec.build.cxx.include_paths += platform.include_paths + include_dir
-  
+  spec.cc.flags             << platform.flags
+  spec.cxx.flags            << platform.flags
+  spec.cc.include_paths     << platform.include_paths
+  spec.cxx.include_paths    << platform.include_paths
   spec.linker.library_paths += platform.library_paths
-  spec.linker.libraries += platform.libs
-  spec.build.linker.library_paths += platform.library_paths
-  spec.build.linker.libraries += platform.libs
-  spec.build.libmruby << platform.files
+  spec.linker.libraries     += platform.libs
 end

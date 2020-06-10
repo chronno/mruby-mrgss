@@ -9,6 +9,8 @@
 #include <GL/gl3w.h>
 #else 
 #include <emscripten/emscripten.h>
+#include <GLES2/gl2.h>
+#include <GLES3/gl3.h>
 #endif
 #include <GLFW/glfw3.h>
 #include <kazmath.h>

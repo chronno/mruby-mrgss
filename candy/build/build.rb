@@ -11,14 +11,14 @@ module Candy
             File.join(@env.dir, 'candy', 'toolchains', "#{toolchain_name}.cmake")
         end
 
-        def add_dependency(name, format, source, includes, lib = nil, flags=[], tool="cmake")
-            case format
+        def add_dependency(name, fetchformat, source, includes, lib = nil, flags=[], tool="cmake")
+            case fetchformat
             when 'git'
                 dep = Candy::Git.new(name, source, lib, includes, flags, tool)
                 dep.env = @env
                 @dependencies.push(dep)
             else
-                print "something went wrong"
+                print "unknown fetch format"
             end
         end
 
@@ -31,7 +31,7 @@ module Candy
 
         def compile
             @dependencies.each do |dependency|
-                dependency.compile(@downloads_dir, toolchain)
+                dependency.compile(@downloads_dir, toolchain) unless dependency.compiled?(@join_dir)
             end
         end
 
@@ -70,6 +70,12 @@ module Candy
 
         def libraries
             []
+        end
+
+        def prepare
+            fetch
+            compile
+            join
         end
     end
 end

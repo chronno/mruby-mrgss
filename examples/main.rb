@@ -5,8 +5,8 @@ begin
         def start
             @sprites = []
             @bitmap = Bitmap.new("resources/sheet.png")
-            audio = Audio.new("resources/sound.mp3")
-            audio.play
+            #audio = Audio.new("resources/sound.mp3")
+            #audio.play
             build_sprite(1)
         end
 

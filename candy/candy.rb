@@ -11,10 +11,10 @@ end
 require_relative ('dependency')
 require_relative ('dependencies/git')
 require_relative ('compilation/cmake')
-require_relative ('compilation/genie')
 require_relative ('build/build')
 require_relative ('build/linux')
 require_relative ('build/mingw')
+require_relative ('build/emscripten')
 
 module Candy
     class Platform
@@ -45,8 +45,8 @@ module Candy
             raise 'Builder only allows GCC Builds on Linux for now.'
         end
 
-        def emscripten_build
-            raise "unimplemented build for Web" if env.build.toolchains.include? 'gcc'
+        def emscripten_build(env)
+            return Emscripten.new(env) if env.build.toolchains.include? 'gcc'
             raise 'Builder only allows GCC Builds for Web for now.'
         end
 
