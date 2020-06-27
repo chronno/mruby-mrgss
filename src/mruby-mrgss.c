@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <string.h>
 #include <mruby.h>
@@ -16,4 +15,3 @@ int main() {
     fclose(file);
     return 0;
 }
-

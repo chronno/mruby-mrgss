@@ -26,7 +26,7 @@ module Candy
         def detect_by_cross_build(env)
         return windows_build(env) if /mingw/ =~ env.cc.command
         return emscripten_build(env) if /emcc/ =~ env.cc.command
-        raise 'The only cross-build available for Builder is Windows with MingW.'
+        raise 'Candy dont know how to build with this settings'
         end
 
         def detect_by_system(env)
@@ -36,18 +36,27 @@ module Candy
         end
 
         def windows_build(env)
-        return Mingw.new(env) if env.build.toolchains.include? 'gcc'
-        raise 'Builder allows only MinGW builds for Windows for now.'
+            if env.build.toolchains.include? 'gcc'
+                puts ("Candy found Mingw compilation will proceed to compile")
+                return Mingw.new(env) if env.build.toolchains.include? 'gcc'
+            end
+            raise 'Candy dont know how to build with this settings'
         end
 
         def linux_build(env)
-            return Linux.new(env) if env.build.toolchains.include? 'gcc'
-            raise 'Builder only allows GCC Builds on Linux for now.'
+            if env.build.toolchains.include? 'gcc'
+                puts ("Candy found linux compilation will proceed to compile")
+                return Linux.new(env) 
+            end
+            raise 'Candy dont know how to build with this settings'
         end
 
         def emscripten_build(env)
-            return Emscripten.new(env) if env.build.toolchains.include? 'gcc'
-            raise 'Builder only allows GCC Builds for Web for now.'
+            if env.build.toolchains.include? 'gcc'
+                puts ("Candy found emscripten compilation will proceed to compile")
+                return Emscripten.new(env) if env.build.toolchains.include? 'gcc'
+            end
+            raise 'Candy dont know how to build with this settings'
         end
 
         def osx_build(env)

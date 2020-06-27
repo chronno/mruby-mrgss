@@ -19,6 +19,7 @@ module Candy
         def compile(downloads_dir, toolchain)
             case @tool
             when "cmake"
+                puts "Candy will try to Compile #{name} with #{@tool}"
                 Candy::CMake.new.compile(self, downloads_dir, toolchain)    
             else
                 raise "unknown tool: #{@tool}"
@@ -42,7 +43,8 @@ module Candy
 
         def join_lib(join_dir, compilation_folder)
             find_file(compilation_folder).each do |file|
-                FileUtils.cp(file, File.join(join_dir, "lib")) if file =~ /.*\.a$/
+                FileUtils.cp(file, File.join(join_dir, "lib")) if (file =~ /.*\.a$/)
+                FileUtils.cp(file, File.join(join_dir, "src")) if (file =~ /.*\.c$/)
             end
         end
 

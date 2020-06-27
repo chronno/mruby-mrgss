@@ -2,12 +2,12 @@ module Candy
     class Git < Candy::Dependency
         
         def fetch(dest) 
-            puts("cloning #{@name}...")
+            puts("Candy is fetching #{@name} from #{@src}")
             Dir.chdir(dest)
             if (!File.exists?(@name))
                 ::Git.clone(@src, @name)
             else 
-                puts "Already cloned"
+                puts("Candy already got this! ")
             end
         end
 
